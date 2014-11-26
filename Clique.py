@@ -170,7 +170,6 @@ class Clique:
 		# Pour chaque lien dans X, Récupérer dans T les temps x tq te-delta < x < te. Si len(T) = 1, regarder si x est plus petit que le tmin déjà connu.
 		tp = 0
 		min_t = []
-
 		for u in self._X:
 			for v in self._X:
 				link = frozenset([u,v])
@@ -199,7 +198,8 @@ class Clique:
 		if len(min_t)>0:
 			tfirstlink=min(min_t)
 		if tfirstlink is not None:
-			deltamax=tfirstlink-td
+			if deltamax<delta: deltamax=tfirstlink-td
+		print deltamax
 		return deltamax
 	
 	def getDeltamaxLeft(self,times,tp,delta):
@@ -216,7 +216,8 @@ class Clique:
 		if len(max_t)>0:
 			tlastlink=max(max_t)
 		if tlastlink is not None:
-			deltamax=tp-tlastlink
+			if deltamax<delta: deltamax=tp-tlastlink
+		print deltamax
 		return deltamax
 
 
