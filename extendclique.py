@@ -12,16 +12,17 @@ cliquesliste=[]
 for line in sys.stdin:
 	contents = line.split(" ")[:-1]
 	#print contents
-	if int(contents[2])<=delta and delta < int(contents[3]):
+	#if int(contents[2])<=delta and delta < int(contents[3]):
+	if int(contents[3]>delta):
 		contents[0]=map(int,contents[0].split(","))
 		contents[1]=map(int,contents[1].split(","))
 		contents[2:]=map(int,contents[2:])
 		cliques.append(Clique((set(contents[0]),(contents[4]-delta,contents[5]+delta),contents[1])))
 		cliquesliste.append([set(contents[0]),(contents[4]-delta,contents[5]+delta),contents[1],len(set(contents[0]))])
-#for c in cliques:
-#	print c
-
-
+		
+print 'data loaded'
+for c in cliques:
+	print c
 #NB de noeud par clique
 histo=range(len(cliques))
 for i in range(len(cliques)):

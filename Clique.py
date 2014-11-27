@@ -198,7 +198,7 @@ class Clique:
 		if len(min_t)>0:
 			tfirstlink=min(min_t)
 		if tfirstlink is not None:
-			if deltamax<delta: deltamax=tfirstlink-td
+			if tfirstlink-td<delta: deltamax=tfirstlink-td
 		return deltamax
 	
 	def getDeltamaxLeft(self,times,tp,delta):
@@ -215,7 +215,7 @@ class Clique:
 		if len(max_t)>0:
 			tlastlink=max(max_t)
 		if tlastlink is not None:
-			if deltamax<delta: deltamax=tp-tlastlink
+			if tp-tlastlink<delta: deltamax=tp-tlastlink
 		return deltamax
 
 

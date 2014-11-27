@@ -63,7 +63,7 @@ class CliqueMaster:
 					    
 					    td=c_add.getTd(self._times,delta)
 					    tp=c_add.getTp(self._times,delta)
-					    c_add._deltamax=minNone(c_add.getDeltamaxLeft(self._times,tp,delta),c_add.getDeltamaxRight(self._times,td,delta))
+					    c_add._deltamax=min(c_add.getDeltamaxLeft(self._times,tp,delta),c_add.getDeltamaxRight(self._times,td,delta))
 					    
 					    if c_add._deltamax is not delta:
 					    	if c_add._deltamin<c_add._deltamax:
@@ -98,7 +98,7 @@ class CliqueMaster:
                                                 else: c_add._deltamin=c._deltamin
 					    	td=c_add.getTd(self._times,delta)
 					    	tp=c_add.getTp(self._times,delta)
-					    	c_add._deltamax=minNone(c_add.getDeltamaxRight(self._times,td,delta),c_add.getDeltamaxLeft(self._times,tp,delta))
+					    	c_add._deltamax=min(c_add.getDeltamaxRight(self._times,td,delta),c_add.getDeltamaxLeft(self._times,tp,delta))
 					    	
 						if c_add._deltamax is not delta:
 					    		if c_add._deltamin<c_add._deltamax:
@@ -131,8 +131,9 @@ class CliqueMaster:
 					Xnew = set(c._X).union([node])
 					c_add = Clique((frozenset(Xnew), (c._tb, c._te),(min(c._tlimitb,min(first)),max(c._tlimite,max(last)))))
                                         c_add._deltamin=max(c._deltamin,maxinterval,c_add._tlimite-min(last),max(first)-c_add._tlimitb)
+					
 					tp,td=c_add.getTp(self._times,delta),c_add.getTd(self._times,delta)
-				  	c_add._deltamax=minNone(c_add.getDeltamaxRight(self._times,td,delta),c_add.getDeltamaxLeft(self._times,tp,delta))
+				  	c_add._deltamax=min(c_add.getDeltamaxRight(self._times,td,delta),c_add.getDeltamaxLeft(self._times,tp,delta))
 
 					if c_add._deltamin<c_add._deltamax:
 						self._R.add(CliqueCritique((c_add._X,(c_add._tlimitb,c_add._tlimite),c_add._deltamin,c_add._deltamax,td,tp)))
