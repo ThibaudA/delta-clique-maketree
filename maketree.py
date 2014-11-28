@@ -39,7 +39,7 @@ for c in stock:
 	index=times[c._X].index(c._tlimite)
 	lenght=len(times[c._X])
 	if not (index==0 and  index==lenght-1):
-		c._deltamax=min(abs(c._tlimite-times[c._X][index+1]) if index != lenght-1 else delta,abs(c._tlimite-times[c._X][index-1]) if index!=0 else delta)
+		c._deltamax=min(delta,min(abs(c._tlimite-times[c._X][index+1]) if index != lenght-1 else delta,abs(c._tlimite-times[c._X][index-1]) if index!=0 else delta))
 	
 	c_add=Clique((c._X,(c._tlimite,c._tlimite),(c._tlimite,c._tlimite)))
 	c_add._deltamax=c._deltamax
