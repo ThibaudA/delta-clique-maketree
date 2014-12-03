@@ -30,10 +30,16 @@ for i in combinations(range(len(cliquesliste)),2):
     d=cliquesliste[i[1]]
     if c!=d and c[1][0]<d[1][1] and c[1][1]>d[1][0]:
         inter=c[0].intersection(d[0])
-        timeoverlap=min(c[1][1]-d[1][0],d[1][1]-c[1][0])
-        percent=len(inter)/float(len(c[0]))*timeoverlap/float(c[4])*len(inter)/float(len(d[0]))*timeoverlap/float(d[4])
+        timeoverlap=min(c[1][1],d[1][1])-max(c[1][0],d[1][0])
+        percent=timeoverlap/float(c[4])*len(inter)/float(len(c[0]))*len(inter)/float(len(d[0]))*timeoverlap/float(d[4])
                 
         if percent>=overlap:
+		print c
+		print d
+		print inter
+		print timeoverlap
+		print c[4]
+		print d[4]
                 print percent
                     
 
