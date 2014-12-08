@@ -24,6 +24,7 @@ class CliqueMaster:
 
 
 	def halfMemory(self):
+		#Memory saver
 		length=len(self._S_set)
 		while len(self._S_set) > length/2:
 			trash=self._S_set.pop()
@@ -41,37 +42,40 @@ class CliqueMaster:
 		while len(self._S) != 0:
                         token+=1
 			if token==10000:
-				if len(self._S_set)>500000:  
-					#Limite de Cliques dans le set _S_Set (economise la mémoire)
+				if len(self._S_set)>500000:  #reduce the memory use
 					self.halfMemory()
 					sys.stderr.write("Cleaning _S_set \n")
-				sys.stderr.write("S:"+ str(len(self._S)) + "\n")
+				sys.stderr.write("S:"+ str(len(self._S)) + "\n") #show advancement
 				token=0
+
 			c = self.getClique()
-			is_max = True
+			is_max = True #not really usefull now...
 
 			# Grow time on the right side
 			td = c.getTd(self._times, delta)
 			if c._te != td + delta:
+				#sameclique if the new link is in the clique
 				new_t,sameclique = c.getFirstTInInterval(self._times, self._nodes, td, delta)
 				if new_t is not None:
-                                        if sameclique:
+                                        if sameclique: #addclique+ add to "return"
 				            c_add = Clique((c._X, (c._tb, new_t),(c._tlimitb,new_t)))
                                             if new_t-td>c._deltamin: 
-						    c_add._deltamin=new_t-td
+						    c_add._deltamin=new_t-td #Change deltamin if needed
                                             else: c_add._deltamin=c._deltamin
 					    
 					    td=c_add.getTd(self._times,delta)
 					    tp=c_add.getTp(self._times,delta)
-					    c_add._deltamax=min(c_add.getDeltamaxLeft(self._times,tp,delta),c_add.getDeltamaxRight(self._times,td,delta))
+					    #Calculate deltamax
+					    c_add._deltamax=min(c_add.getDeltamaxLeft(self._times,tp,delta),c_add.getDeltamaxRight(self._times,td,delta)) 
 					    
-					    if c_add._deltamax is not delta:
-					    	if c_add._deltamin<c_add._deltamax:
+					    if c_add._deltamax is not delta: 
+					    	if c_add._deltamin<c_add._deltamax: #if deltamax=delta we dont want this condition (/!\ when you ask delta for look at the data later)
 					    		self._R.add(CliqueCritique((c_add._X,(c_add._tlimitb,c_add._tlimite),c_add._deltamin,c_add._deltamax,td,tp)))
                                             else:
 					    	self._R.add(CliqueCritique((c_add._X,(c_add._tlimitb,c_add._tlimite),c_add._deltamin,c_add._deltamax,td,tp)))
 					else:
- 				            c_add = Clique((c._X, (c._tb, new_t),(c._tlimitb,c._tlimite)))
+ 				            #if different clique we dont want to change deltamax/min
+					    c_add = Clique((c._X, (c._tb, new_t),(c._tlimitb,c._tlimite)))
                                             c_add._deltamin=c._deltamin
                                             c_add._deltamax=c._deltamax
                                         #sys.stderr.write("Adding " + str(c_add) + " (time extension)\n")
@@ -91,21 +95,26 @@ class CliqueMaster:
 			if c._tb != tp - delta:
 				new_t,sameclique = c.getLastTInInterval(self._times, self._nodes, tp, delta)
 
+				#sameclique if the new link is in the clique
 				if new_t is not None:
                                         if sameclique:
 				        	c_add = Clique((c._X, (new_t , c._te),(new_t,c._tlimite)))
-                                                if tp-new_t>c._deltamin: c_add._deltamin=tp-new_t
+                                                if tp-new_t>c._deltamin: 
+							c_add._deltamin=tp-new_t #Change deltamin if needed
                                                 else: c_add._deltamin=c._deltamin
+
 					    	td=c_add.getTd(self._times,delta)
 					    	tp=c_add.getTp(self._times,delta)
+					    	#Calculate deltamax
 					    	c_add._deltamax=min(c_add.getDeltamaxRight(self._times,td,delta),c_add.getDeltamaxLeft(self._times,tp,delta))
 					    	
 						if c_add._deltamax is not delta:
-					    		if c_add._deltamin<c_add._deltamax:
+					    		if c_add._deltamin<c_add._deltamax: #if deltamax=delta we dont want this condition (/!\ when you ask delta for look at the data later)
 					    			self._R.add(CliqueCritique((c_add._X,(c_add._tlimitb,c_add._tlimite),c_add._deltamin,c_add._deltamax,td,tp)))
                                             	else:
 					    		self._R.add(CliqueCritique((c_add._X,(c_add._tlimitb,c_add._tlimite),c_add._deltamin,c_add._deltamax,td,tp)))
 					else:	
+ 				            	#if different clique we dont want to change deltamax/min
                                                 c_add = Clique((c._X, (new_t , c._te),(c._tlimitb,c._tlimite)))       
 						c_add._deltamin=c._deltamin
                                         	c_add._deltamax=c._deltamax
@@ -126,14 +135,18 @@ class CliqueMaster:
 			#sys.stderr.write("    Candidates : %s.\n" % (str(candidates)))
 
 			for node in candidates:
-                                isclique,first,last,maxinterval=c.isClique(self._times,node,delta)
+                                isclique,first,last,maxinterval=c.isClique(self._times,node,delta) 
+				#first: list of first link for each couple of node (excluding "node") 
+				#last: idem
+				#maxinterval: maximum interval between 2 link (same nodes)
 				if isclique:
 					Xnew = set(c._X).union([node])
-					c_add = Clique((frozenset(Xnew), (c._tb, c._te),(min(c._tlimitb,min(first)),max(c._tlimite,max(last)))))
+					c_add = Clique((frozenset(Xnew), (c._tb, c._te),(min(c._tlimitb,min(first)),max(c._tlimite,max(last))))) #determination of limitb/e
                                         
 					
-					tp,td=c_add.getTp(self._times,delta),c_add.getTd(self._times,delta)
+					tp,td=c_add.getTp(self._times,delta),c_add.getTd(self._times,delta) #td,tp for the new clique
 				  	c_add._deltamax=min(c_add.getDeltamaxRight(self._times,td,delta),c_add.getDeltamaxLeft(self._times,tp,delta))
+					#deltamin determination, maybe the use of last and first is useless here
 					c_add._deltamin=max(c._deltamin,maxinterval,c_add._tlimite-min(last),max(first)-c_add._tlimitb,c_add._tlimite-td,tp-c_add._tlimitb)
 					if c_add._deltamin<c_add._deltamax:
 						self._R.add(CliqueCritique((c_add._X,(c_add._tlimitb,c_add._tlimite),c_add._deltamin,c_add._deltamax,td,tp)))
@@ -148,7 +161,7 @@ class CliqueMaster:
 
 
 
-	def getDeltaCliques(self, delta):
+	def getDeltaCliques(self, delta): #old function (see delta-cliques)
 		""" Returns a set of maximal cliques. """
 
 		while len(self._S) != 0:
@@ -221,13 +234,4 @@ class CliqueMaster:
 
 
 
-def minNone(tlimitb,first):
-	if tlimitb!=None:
-		if first!=None:
-			return min(tlimitb,first)
-		else:
-			return tlimitb
-	elif first!=None:
-		return first 
-	else:
-		return None
+

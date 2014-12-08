@@ -66,13 +66,14 @@ class Clique:
 			if max(ict) > delta:
 				return False,None,None,None
 
-                        first.append(min(time[1:-1]))
-                        last.append(max(time[1:-1]))
+                        first.append(min(time[1:-1])) #first link for this 2 nodes
+                        last.append(max(time[1:-1])) #last link for this 2 nodes
 			if len(time)<=3:
 				interval=[0]
 			else:
 				interval=[j-i for i,j in zip(time[1:-2],time[2:-1])]
-			if max(interval)>maxinterval or maxinterval==None: maxinterval=max(interval)
+			if max(interval)>maxinterval or maxinterval==None: maxinterval=max(interval) #max interval for this two nodes
+
 		return True,first,last,maxinterval
 
 	def getFirstTInInterval(self, times, nodes, td, delta):
@@ -185,6 +186,7 @@ class Clique:
 		return tp
 	
 	def getDeltamaxRight(self,times,td,delta):
+		#deltamax determination
 		tfirstlink=None
 		deltamax=delta
 		min_t=[]
@@ -192,7 +194,7 @@ class Clique:
 			for v in self._X:
 				link= frozenset([u,v])
 				if link in times:
-					a=[x for x in times[link] if x>self._tlimite]
+					a=[x for x in times[link] if x>self._tlimite] #need a new condition to me more efficient like x<td+delta
 					if len(a)>0:
 						min_t.append(min(a))
 		if len(min_t)>0:
