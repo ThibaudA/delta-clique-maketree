@@ -130,15 +130,16 @@ class CliqueMaster:
 				if isclique:
 					Xnew = set(c._X).union([node])
 					c_add = Clique((frozenset(Xnew), (c._tb, c._te),(min(c._tlimitb,min(first)),max(c._tlimite,max(last)))))
-                                        c_add._deltamin=max(c._deltamin,maxinterval,c_add._tlimite-min(last),max(first)-c_add._tlimitb)
+                                        
 					
 					tp,td=c_add.getTp(self._times,delta),c_add.getTd(self._times,delta)
 				  	c_add._deltamax=min(c_add.getDeltamaxRight(self._times,td,delta),c_add.getDeltamaxLeft(self._times,tp,delta))
-
+					c_add._deltamin=max(c._deltamin,maxinterval,c_add._tlimite-min(last),max(first)-c_add._tlimitb,c_add._tlimite-td,tp-c_add._tlimitb)
 					if c_add._deltamin<c_add._deltamax:
 						self._R.add(CliqueCritique((c_add._X,(c_add._tlimitb,c_add._tlimite),c_add._deltamin,c_add._deltamax,td,tp)))
+						#sys.stderr.write("adding " + str(c_add) + " from "+ str(c) +" (node extension)\n")
 					self.addClique(c_add)
-					#sys.stderr.write("Adding " + str(c_add) + " (node extension)\n")
+					
 					is_max = False
 
 			#if is_max:
