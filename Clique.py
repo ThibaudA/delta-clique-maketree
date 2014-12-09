@@ -79,7 +79,7 @@ class Clique:
 	def getFirstTInInterval(self, times, nodes, td, delta):
 		# Plus petit t entre te et td + delta impliquant (u,v) ?
 		t =  None
-                sameclique=None
+                sameclique=False
 		# Bien extraire tous les noeuds de la clique et du voisinage de chaque noeud de la clique (c'est ici qu'on fait grossir le temps pour pouvoir ajouter des noeuds)
 		# Get all links implying at least one of X's nodes.
 		candidates = set()
@@ -105,8 +105,11 @@ class Clique:
                                                 sameclique=True
                                             else :
                                                  sameclique=False
-
-			elif index < len(times[candidate]) and times[candidate][index] <= td + delta:
+                                        elif t==times[candidate][index-1]:
+                                            if candidate.issubset(self._X):
+                                                sameclique=True
+			
+                        elif index < len(times[candidate]) and times[candidate][index] <= td + delta:
 				if times[candidate][index] > self._te:
 					if t>times[candidate][index] or t==None:
         					t = times[candidate][index]
@@ -114,7 +117,9 @@ class Clique:
                                                     sameclique=True
                                                 else :
                                                     sameclique=False
-
+                                        elif t==times[candidate][index]:
+                                            if candidate.issubset(self._X):
+                                                sameclique=True
 		#sys.stderr.write("    new_t = %s\n" % (str(t)))
 		return t,sameclique
 
@@ -145,7 +150,9 @@ class Clique:
                                             sameclique=True
                                         else :
                                             sameclique=False
-
+				elif  t==times[candidate][index]:
+                                        if candidate.issubset(self._X):
+                                            sameclique=True
 		#sys.stderr.write("    new_t = %s\n" % (str(t)))
 		return t,sameclique
 
