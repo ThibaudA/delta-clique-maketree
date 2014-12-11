@@ -36,10 +36,6 @@ for i in combinations(range(len(cliquesliste)),2):
         if percent>=overlap:
 		print c
 		print d
-		print inter
-		print timeoverlap
-		print c[4]
-		print d[4]
                 print percent
                     
 
