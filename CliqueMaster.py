@@ -63,7 +63,7 @@ class CliqueMaster:
 						    c_add._deltamin=new_t-td #Change deltamin if needed
                                             else: c_add._deltamin=c._deltamin
 					
-                                        c._deltamax=max(c._deltamax,td-new_t)
+                                            c._deltamax=max(c._deltamax,new_t-td)
 
 					else:
  				            #if different clique we dont want to change deltamax/min
@@ -92,19 +92,17 @@ class CliqueMaster:
                                                 if tp-new_t>c._deltamin: 
 							c_add._deltamin=tp-new_t #Change deltamin if needed
                                                 else: c_add._deltamin=c._deltamin
-                                        c._deltamax=max(c._deltamax,new_t-tp)
+                                        	c._deltamax=max(c._deltamax,tp-new_t)
 					    	
 					else:	
  				            	#if different clique we dont want to change deltamax/min
                                                 c_add = Clique((c._X, (new_t , c._te),(c._tlimitb,c._tlimite)))       
 						c_add._deltamin=c._deltamin
-                                        	c_add._deltamax=c._deltamax
                                         self.addClique(c_add)
 					#sys.stderr.write("Adding " + str(c_add) + " (left time extension)\n")
 				else:
 					c_add = Clique((c._X, (tp - delta, c._te),(c._tlimitb,c._tlimite)))
 					c_add._deltamin=c._deltamin
-                                        c_add._deltamax=c._deltamax
 					self.addClique(c_add)
 					#sys.stderr.write("Adding " + str(c_add) + " (left time delta extension)\n")
 				is_max = False
@@ -129,10 +127,14 @@ class CliqueMaster:
 					
                                         self.addClique(c_add)
 					
-                                        c._deltamax=max(tp-c_tlimite,)
 					is_max = False
+			
 
-			#if is_max: #deltamax=delta + add c to R
+			if c._deltamax is not None:
+				self._R.add(CliqueCritique((c._X,(c._tlimitb,c._tlimite),c._deltamin,c._deltamax,td,tp)))
+			if is_max: #deltamax=delta + add c to R
+				self._R.add(CliqueCritique((c._X,(c._tlimitb,c._tlimite),c._deltamin,delta,td,tp)))
+
 				#sys.stderr.write(str(c) + " is maximal\n")
 		return self._R
 
