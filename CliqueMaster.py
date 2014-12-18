@@ -42,7 +42,7 @@ class CliqueMaster:
 		while len(self._S) != 0:
                         token+=1
 			if token==10000:
-				if len(self._S_set)>500000:  #reduce the memory use
+				if len(self._S_set)>700000:  #reduce the memory use
 					self.halfMemory()
 					sys.stderr.write("Cleaning _S_set \n")
 				sys.stderr.write("S:"+ str(len(self._S)) + "\n") #show advancement
@@ -57,13 +57,15 @@ class CliqueMaster:
 				#sameclique if the new link is in the clique
 				new_t,sameclique = c.getFirstTInInterval(self._times, self._nodes, td, delta)
 				if new_t is not None:
-                                        if sameclique: #addclique+ add to "return"
+                                        if sameclique: #addclique
 				            c_add = Clique((c._X, (c._tb, new_t),(c._tlimitb,new_t)))
                                             if new_t-td>c._deltamin: 
 						    c_add._deltamin=new_t-td #Change deltamin if needed
                                             else: c_add._deltamin=c._deltamin
 					
-                                            c._deltamax=max(c._deltamax,new_t-td)
+                                            if c._deltamax is not None:
+                                                c._deltamax=min(c._deltamax,new_t-td)
+					    else: c._deltamax=new_t-td
 
 					else:
  				            #if different clique we dont want to change deltamax/min
@@ -92,7 +94,9 @@ class CliqueMaster:
                                                 if tp-new_t>c._deltamin: 
 							c_add._deltamin=tp-new_t #Change deltamin if needed
                                                 else: c_add._deltamin=c._deltamin
-                                        	c._deltamax=max(c._deltamax,tp-new_t)
+                                        	if c._deltamax is not None:
+							c._deltamax=min(c._deltamax,tp-new_t)
+						else: c._deltamax=tp-new_t
 					    	
 					else:	
  				            	#if different clique we dont want to change deltamax/min
@@ -130,7 +134,7 @@ class CliqueMaster:
 					is_max = False
 			
 
-			if c._deltamax is not None:
+			if c._deltamax is not None and c._deltamax>c._deltamin:
 				self._R.add(CliqueCritique((c._X,(c._tlimitb,c._tlimite),c._deltamin,c._deltamax,td,tp)))
 			if is_max: #deltamax=delta + add c to R
 				self._R.add(CliqueCritique((c._X,(c._tlimitb,c._tlimite),c._deltamin,delta,td,tp)))

@@ -18,7 +18,6 @@ for line in sys.stdin:
 	link = frozenset([u,v])
 	time = (t,t)
 	
-        #if t==1:i
         Cm.addClique(Clique((link,(t,t),(t,t))))
 	#stock.append(CliqueCritique((link,(t,t),0,delta,t,t))) 
 	# Populate data structures
