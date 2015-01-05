@@ -17,7 +17,6 @@ for line in sys.stdin:
 
 	link = frozenset([u,v])
 	time = (t,t)
-	
         Cm.addClique(Clique((link,(t,t),(t,t))))
 	#stock.append(CliqueCritique((link,(t,t),0,delta,t,t))) 
 	# Populate data structures
@@ -39,7 +38,7 @@ for line in sys.stdin:
 	
 Cm._times = times
 Cm._nodes = nodes
-sys.stderr.write("Processed " + str(nb_lines) + "from stdin\n")
+sys.stderr.write("Processed " + str(nb_lines) + " from stdin\n")
 R = Cm.getTree(delta)
 Cm.printCliques()	
 

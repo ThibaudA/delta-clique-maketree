@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 import operator
 import sys
 
-
+sys.stderr.write('Node tb,te tlimitb,tlimite\n')
 delta = int(sys.argv[1])
 overlap = int(sys.argv[2])/100.
 cliques=[]
