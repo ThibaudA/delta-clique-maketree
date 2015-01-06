@@ -107,7 +107,7 @@ class CliqueMaster:
  				            	#if different clique we dont want to change deltamax/min
                                                 c_add = Clique((c._X, (new_t , c._te),(c._tlimitb,c._tlimite)))       
 						c_add._deltamin=c._deltamin
-						if tp-new_t>c._deltamax:
+						if tp-new_t<c._deltamax:
 							c._deltamax = None
 
 
