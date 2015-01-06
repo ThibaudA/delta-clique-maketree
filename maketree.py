@@ -17,8 +17,7 @@ for line in sys.stdin:
 
 	link = frozenset([u,v])
 	time = (t,t)
-        if t==2 and link==frozenset([1,2]):
-		Cm.addClique(Clique((link,(t,t),(t,t))))
+	Cm.addClique(Clique((link,(t,t),(t,t))))
 	#stock.append(CliqueCritique((link,(t,t),0,delta,t,t))) 
 	# Populate data structures
 	if not times.has_key(link):
