@@ -146,9 +146,9 @@ class CliqueMaster:
 					c_add._deltamin=max(c._deltamin,maxinterval,c_add._tlimite-min(last),max(first)-c_add._tlimitb,c_add._tlimite-td,tp-c_add._tlimitb)
 					if time_extension is not None :
 						if c._deltamax is not None:
-							if c_add._deltamin<=time_extention:
+							if c_add._deltamin<=time_extension:
 								c._deltamax=min(c_add._deltamin,c._deltamax)
-						elif c_add._deltamin<=time_extention:
+						elif c_add._deltamin<=time_extension:
 							c._deltamax=c_add._deltamin
 					
 					elif c._deltamax is not None:
