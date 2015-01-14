@@ -3,7 +3,7 @@ import sys
 import bisect
 
 class Clique:
-	def __init__(self, c):
+	def __init__(self, c,candidates=set([])):
 		(X,(tb,te),(tlimitb,tlimite)) = c
                 self._deltamin=0
 		self._deltamax=None
@@ -12,7 +12,7 @@ class Clique:
                 self._tlimite=tlimite
                 self._tb = tb
 		self._te = te
-                self._candidates = set()
+                self._candidates = candidates
 	
 	def __eq__(self, other):
 		if self._X == other._X and self._tb == other._tb and self._te == other._te:
@@ -29,13 +29,10 @@ class Clique:
 	
 	def getAdjacentNodes(self, times, nodes, delta):
             if self._te - self._tb <= delta:
-                self._candidates = set()
-
                 for u in self._X:
                     neighbors = nodes[u]
                     for n in neighbors:
                         # On regarde si le lien est apparu entre tb et te
-                        is_present = False
                         if self._tb in times[frozenset([u,n])]:
 				self._candidates.add(n)
 
@@ -43,7 +40,7 @@ class Clique:
                         	self._candidates.add(n)
 
 
-                    self._candidates = self._candidates.difference(self._X)
+            self._candidates = self._candidates.difference(self._X)
 	    return self._candidates
 
 	

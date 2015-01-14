@@ -1,4 +1,4 @@
-rom CliqueMaster import CliqueMaster
+from CliqueMaster import CliqueMaster
 from Clique import Clique
 import sys
 

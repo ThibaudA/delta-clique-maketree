@@ -8,7 +8,6 @@ times = dict()
 nodes = dict()
 delta = int(sys.argv[1]) 
 nb_lines = 0
-stock=[]
 for line in sys.stdin:
 	contents = line.split(" ")
 	t = int(contents[0])
@@ -17,8 +16,9 @@ for line in sys.stdin:
 
 	link = frozenset([u,v])
 	time = (t,t)
-	Cm.addClique(Clique((link,(t,t),(t,t))))
-	#stock.append(CliqueCritique((link,(t,t),0,delta,t,t))) 
+	
+	Cm.addClique(Clique((link,(t,t),(t,t)),set([])))
+	
 	# Populate data structures
 	if not times.has_key(link):
 		times[link] = []
