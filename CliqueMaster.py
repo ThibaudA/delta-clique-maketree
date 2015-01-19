@@ -132,10 +132,10 @@ class CliqueMaster:
 			sys.stderr.write("    Candidates : %s.\n" % (str(candidates)))
 
 			for node in candidates:
-				if c._deltamax is not None:
-                                	isclique,first,last,maxinterval=c.isClique(self._times,node,min(delta,c._deltamax)) 
-				else:
-					isclique,first,last,maxinterval=c.isClique(self._times,node,delta)
+				#if c._deltamax is not None:
+                                #	isclique,first,last,maxinterval=c.isClique(self._times,node,min(delta,c._deltamax)) 
+				#else:
+				isclique,first,last,maxinterval=c.isClique(self._times,node,delta)
 				#first: list of first link for each couple of node (excluding "node") 
 				#last: idem
 				#maxinterval: maximum interval between 2 link (same nodes)
