@@ -143,19 +143,24 @@ class CliqueMaster:
 					Xnew = set(c._X).union([node])
 					c_add = Clique((frozenset(Xnew), (c._tb, c._te),(min(c._tlimitb,min(first)),max(c._tlimite,max(last)))),c._candidates) #determination of limitb/e
 					#deltamin determination, maybe the use of last and first is useless here
-					c_add._deltamin=max(c._deltamin,maxinterval,c_add._tlimite-min(last),max(first)-c_add._tlimitb,c_add._tlimite-td,tp-c_add._tlimitb)
-					if time_extension is not None :
-						if c._deltamax is not None:
-							if c_add._deltamin<=time_extension:
-								c._deltamax=min(c_add._deltamin,c._deltamax)
-						elif c_add._deltamin<=time_extension:
-							c._deltamax=c_add._deltamin
 					
-					elif c._deltamax is not None:
-						c._deltamax=min(c_add._deltamin,c._deltamax)
-					else:
-						c._deltamax=c_add._deltamin
+					c_add._deltamin=max(c._deltamin,maxinterval,c_add._tlimite-min(last),max(first)-c_add._tlimitb,c_add._tlimite-td,tp-c_add._tlimitb)
+					
+					#if time_extension is not None :
+					#	if c._deltamax is not None:
+					#		if c_add._deltamin<=time_extension:
+					#			c._deltamax=min(c_add._deltamin,c._deltamax)
+					#	elif c_add._deltamin<=time_extension:
+					#		c._deltamax=c_add._deltamin
+					#
+					#elif c._deltamax is not None:
+					#	c._deltamax=min(c_add._deltamin,c._deltamax)
+					#else:
+					#	c._deltamax=c_add._deltamin
 
+					if c._deltamax is not None:
+						#if c._deltamax>=c_add._deltamin:
+						c._deltamax=None
 
 
 
@@ -170,6 +175,7 @@ class CliqueMaster:
 				c_add=CliqueCritique((c._X,(c._tlimitb,c._tlimite),c._deltamin,c._deltamax,td,tp))
 				self._R.add(c_add)
 				sys.stderr.write("adding " + str(c_add) + " to Return\n")
+
 			if is_max: #deltamax=delta + add c to R
 				sys.stderr.write(str(c) + " is maximal\n")
 				c_add=CliqueCritique((c._X,(c._tlimitb,c._tlimite),c._deltamin,delta,td,tp))

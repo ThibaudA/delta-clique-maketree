@@ -61,6 +61,7 @@ class Clique:
 				time = [self._tb] + time + [self._te]
 				ict = [j - i for i,j in zip(time[:-1], time[1:])]
 			if max(ict) > delta:
+				print ict
 				return False,None,None,None
 
                         first.append(min(time[1:-1])) #first link for this 2 nodes

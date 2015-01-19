@@ -48,7 +48,7 @@ class TestClique(unittest.TestCase):
 		R = self.Cm.getTree(5)
 		R_expected = set([
 
-			CliqueCritique((frozenset([1,2,3]), (1,3),1,5,1,3)),
+			CliqueCritique((frozenset([1,2,3]), (1,3),2,5,1,3)),
 			CliqueCritique((frozenset([1,2]), (1,1),0,5,1,1)),
 			CliqueCritique((frozenset([2,3]), (3,3),0,5,3,3)),
 			CliqueCritique((frozenset([1,3]), (2,2),0,5,2,2))
@@ -198,6 +198,57 @@ class TestClique(unittest.TestCase):
 		for c in R_expected:
 			debug_msg += str(c) + "\n"
 		self.assertEqual(R, R_expected, debug_msg)
+
+	def test_simultaneouslinkswithadoublelink(self):
+		self.Cm._S = deque([
+		    Clique((frozenset([1, 2]), (1, 1),(1,1))),
+		    Clique((frozenset([2, 3]), (1, 1),(1,1))),
+		    Clique((frozenset([1, 3]), (1, 1),(1,1))),
+		    Clique((frozenset([2, 3]), (2, 2),(2,2)))
+		])
+		self.Cm._nodes = {1: set([2, 3]), 2: set([1, 3]), 3: set([1, 2])}
+		self.Cm._times = {frozenset([1, 3]): [1], frozenset([1, 2]): [1], frozenset([2, 3]): [1,2]}
+
+		R = self.Cm.getTree(5)
+		R_expected = set([
+			CliqueCritique((frozenset([1,2,3]), (1,2),1,5,1,2)),
+			CliqueCritique((frozenset([1,2,3]), (1,1),0,1,1,1)),
+			CliqueCritique((frozenset([2,3]), (1,2),1,5,1,2)),
+			CliqueCritique((frozenset([2,3]), (2,2),0,1,1,2))
+		])
+		debug_msg = "\nGot :\n" + str(self.Cm)
+		debug_msg += "\nExpected :\n"
+		for c in R_expected:
+			debug_msg += str(c) + "\n"
+		self.assertEqual(R, R_expected, debug_msg)
+
+	def test_extensionvsdeltamax(self):
+		self.Cm._S = deque([
+		    Clique((frozenset([1, 2]), (1, 1),(1,1))),
+		    Clique((frozenset([2, 3]), (2, 2),(2,2))),
+		    Clique((frozenset([1, 2]), (3, 3),(3,3))),
+		    Clique((frozenset([1, 2]), (6, 6),(6,6))),
+
+		])
+		self.Cm._nodes = {1: set([2]), 2: set([1, 3]), 3: set([2])}
+		self.Cm._times = {frozenset([1, 2]): [1,3,6], frozenset([2, 3]): [2]}
+
+		R = self.Cm.getTree(10)
+		R_expected = set([
+			
+			CliqueCritique((frozenset([2,3]), (2,2),0,10,2,2)),
+			CliqueCritique((frozenset([1,2]), (1,1),0,2,1,1)),
+			CliqueCritique((frozenset([1,2]), (3,3),0,2,3,3)),
+			CliqueCritique((frozenset([1,2]), (1,3),2,3,1,3)),
+			CliqueCritique((frozenset([1,2]), (6,6),0,3,6,6)),
+			CliqueCritique((frozenset([1,2]), (1,6),3,10,1,6))
+		])
+		debug_msg = "\nGot :\n" + str(self.Cm)
+		debug_msg += "\nExpected :\n"
+		for c in R_expected:
+			debug_msg += str(c) + "\n"
+		self.assertEqual(R, R_expected, debug_msg)
+
 
 
 if __name__ == '__main__':
