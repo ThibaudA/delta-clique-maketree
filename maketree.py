@@ -11,8 +11,8 @@ nb_lines = 0
 for line in sys.stdin:
 	contents = line.split(" ")
 	t = int(contents[0])
-	u = int(contents[1])
-	v = int(contents[2])
+	u = contents[1]
+	v = contents[2]
 
 	link = frozenset([u,v])
 	time = (t,t)
@@ -39,6 +39,7 @@ Cm._times = times
 Cm._nodes = nodes
 sys.stderr.write("Processed " + str(nb_lines) + " from stdin\n")
 R = Cm.getTree(delta)
-Cm.printCliques()	
+Cm.printCliques()
+print 'end'
 
 

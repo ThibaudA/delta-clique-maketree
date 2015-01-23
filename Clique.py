@@ -30,8 +30,8 @@ class Clique:
 	def getAdjacentNodes(self, times, nodes, delta):
             if self._te - self._tb <= delta:
                 for u in self._X:
-                    neighbors = nodes[u]
-                    for n in neighbors:
+		    neighbors = nodes[u]
+		    for n in neighbors:
                         # On regarde si le lien est apparu entre tb et te
                         if self._tb in times[frozenset([u,n])]:
 				self._candidates.add(n)
@@ -44,10 +44,10 @@ class Clique:
 	    return self._candidates
 
 	
-	def isClique(self, times, node, delta):
+	def isClique(self, times, node, delta,nodes):
 		""" returns True if X(c) union node is a clique over tb;te, False otherwise"""
                 first,last,maxinterval=[],[],None
-		for i in self._X:
+		for i in self._X.intersection(set(nodes)):
 			if frozenset([i, node]) not in times.keys():
 				# Verifier que le lien existe
 				#sys.stderr.write("(%d, %d) does not exist\n" % (i, node))

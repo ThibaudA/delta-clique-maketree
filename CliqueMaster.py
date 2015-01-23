@@ -13,7 +13,8 @@ class CliqueMaster:
 		self._S_set = set()
 		self._R = set()
 		self._times = dict()
-		self._nodes = dict()
+		self._nodestop = dict()
+		self._nodesbot = dict()
 
 	def addClique(self, c):
 		""" Adds a clique to S, checking beforehand that this clique is not already present in S. """
@@ -135,7 +136,11 @@ class CliqueMaster:
 				#if c._deltamax is not None:
                                 #	isclique,first,last,maxinterval=c.isClique(self._times,node,min(delta,c._deltamax)) 
 				#else:
-				isclique,first,last,maxinterval=c.isClique(self._times,node,delta)
+				if node in self._nodestop:
+					innodestop=True
+				else:
+					innodestop=False
+				isclique,first,last,maxinterval=c.isClique(self._times,node,delta,self._nodestop if  node not in self._nodestop else self._nodesbot)
 				#first: list of first link for each couple of node (excluding "node") 
 				#last: idem
 				#maxinterval: maximum interval between 2 link (same nodes)
