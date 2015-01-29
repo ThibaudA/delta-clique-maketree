@@ -78,12 +78,12 @@ class TestClique(unittest.TestCase):
 		R = self.Cm.getTree(10)
 		R_expected = set([
 			
-			CliqueCritique((frozenset([1,2]), (1,1),0,10,1,1)),
-			CliqueCritique((frozenset([1,3]), (2,2),0,10,2,2)),
-			CliqueCritique((frozenset([4,2]), (3,3),0,10,3,3)),
-			CliqueCritique((frozenset([4,3]), (4,4),0,10,4,4)),
+			CliqueCritique((frozenset([1,3]), (1,1),0,10,1,1)),
+			CliqueCritique((frozenset([1,4]), (2,2),0,10,2,2)),
+			CliqueCritique((frozenset([2,3]), (3,3),0,10,3,3)),
+			CliqueCritique((frozenset([2,4]), (4,4),0,10,4,4)),
 			CliqueCritique((frozenset([1,2,3]), (1,3),2,10,1,3)),
-			CliqueCritique((frozenset([2,3,4]), (2,4),2,10,2,4)),
+			CliqueCritique((frozenset([1,2,4]), (2,4),2,10,2,4)),
 			CliqueCritique((frozenset([1,3,4]), (1,2),1,10,1,2)),
 			CliqueCritique((frozenset([2,3,4]), (3,4),1,10,3,4)),
 			CliqueCritique((frozenset([1,2,3,4]), (1,4),3,10,1,4))
