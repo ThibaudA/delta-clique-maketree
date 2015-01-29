@@ -250,7 +250,7 @@ class CliqueMaster:
 		return self._R
 	
 
-
+ 
 
 	def printCliques(self):
 		out=sorted(list(self._R),key=operator.attrgetter('_deltamin'))
@@ -262,6 +262,7 @@ class CliqueMaster:
 		for c in self._R:
 			msg += str(c) + "\n"
 		return msg
+
 
 
 
