@@ -42,9 +42,6 @@ def bipartite(nodes):
             nodes_set.difference_update(nodes[u])
 
 
-    print nodestop
-    print nodesbot
-
     return nodestop,nodesbot
 
 for line in sys.stdin:
