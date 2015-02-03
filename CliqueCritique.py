@@ -20,7 +20,7 @@ class CliqueCritique:
 			return False
 
 	def __hash__(self):
-		return hash((self._X,self._tlimitb,self._tlimite,self._deltamin,self._deltamax))
+		return hash((self._X,self._tlimitb,self._tlimite,self._deltamin,self._deltamax,self._td,self._tp))
 
 	def __str__(self):
 		return ','.join(map(str, list(self._X)))  + " " + str(self._tlimitb) + "," + str(self._tlimite) + " " +  str(self._deltamin) + " " + str(self._deltamax) + " " + str(self._td)+ " " + str(self._tp)
