@@ -164,7 +164,7 @@ class CliqueMaster:
 
 
 
-					sys.stderr.write("adding " + str(c_add) + " from "+ str(c) +" (node extension)\n")
+					sys.stderr.write("Adding " + str(c_add) + " from "+ str(c) +" (node extension)\n")
 					
                                         self.addClique(c_add)
 					
@@ -174,13 +174,13 @@ class CliqueMaster:
 			if c._deltamax is not None and c._deltamax>c._deltamin:
 				c_add=CliqueCritique((c._X,(c._tlimitb,c._tlimite),c._deltamin,c._deltamax,td,tp))
 				self._R.add(c_add)
-				sys.stderr.write("adding " + str(c_add) + " to Return\n")
+				sys.stderr.write("Return " + str(c_add) + "\n")
 
 			if is_max: #deltamax=delta + add c to R
 				sys.stderr.write(str(c) + " is maximal\n")
 				c_add=CliqueCritique((c._X,(c._tlimitb,c._tlimite),c._deltamin,delta,td,tp))
 				self._R.add(c_add)
-				sys.stderr.write("adding " + str(c_add) + " to Return\n")
+				sys.stderr.write("Return " + str(c_add) + "\n")
 
 				
 		return self._R
