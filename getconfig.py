@@ -101,9 +101,27 @@ for cc in nodescritiques:
 	nodesconfig[cc]=set()
 	for u in nodescritiques[cc]:
 		for v in nodessuccess[u]:
-			nodesconfig[cc].add(reversenodescritiques[v]) 
+			if not reversenodescritiques[v] == cc:
+
+				nodesconfig[cc].add(reversenodescritiques[v]) 
 	#	for v in nodespredecess[u]:
 	#		nodesconfig[cc].add(reversenodescritiques[v])		
+for c in nodescritiques:
+	print "nodes"
+	print c
+	print "link"
+	for l in nodescritiques[c]:
+		print l
+
+for c in nodesconfig:
+	print "nodes config"
+	print c
+	print "link"
+	for l in nodesconfig[c]:
+		print l
+
+
+
 nodes = set()
 links = ""
 
@@ -112,10 +130,10 @@ sys.stdout.write("graph G {\n")
 
 for cc in nodesconfig:
 	
-        u = "({" + str(tuple(cc._X)) +"}, [" + str(cc._tlimitb) + ";" + str(cc._tlimite) + "])"
+        u = "({" + str(tuple(cc._X)) +"}, [" + str(cc._tlimitb) + ";" + str(cc._tlimite) + "], ["+str(cc._deltamin)+ ";" + str(cc._deltamax) + "])"
 	nodes.add(u)
 	for c in nodesconfig[cc]:
-        	v = "({" + str(tuple(c._X)) +"}, [" + str(c._tlimitb) + ";" + str(c._tlimite) + "])"
+        	v = "({" + str(tuple(c._X)) +"}, [" + str(c._tlimitb) + ";" + str(c._tlimite) +"], ["+str(cc._deltamin)+ ";" + str(cc._deltamax) + "])"
 		nodes.add(v)	
         	links +=  "\"" + u + "\" -- \"" + v +"\" [color=green];\n"
 
