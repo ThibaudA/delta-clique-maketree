@@ -10,6 +10,10 @@ import sys
 nodes=set()
 nodessuccess = dict()
 nodespredecess= dict()
+
+nodesextensionsuccess=dict()
+nodesextensionpredecess=dict()
+
 nodescritiques=dict()
 reversenodescritiques=dict()
 read=False
@@ -23,7 +27,7 @@ while len(stock)!=0:
 	        X = line.strip().split(" ")[2].split(",")
 	        tb = line.strip().split(" ")[3].split(",")[0]
 	        te = line.strip().split(" ")[3].split(",")[1]
-		tlimitb=line.strip().split(" ")[4].split(",")[1]
+		tlimitb=line.strip().split(" ")[4].split(",")[0]
 		tlimite=line.strip().split(" ")[4].split(",")[1]
         
 		u = Clique((frozenset(X),(tb,te),(tlimitb,tlimite)))
@@ -33,22 +37,27 @@ while len(stock)!=0:
 		        if not u in nodessuccess:
 				nodessuccess[u] = set()
 				nodespredecess[u]=set()
+				nodesextensionsuccess[u]=set()
+				nodesextensionpredecess[u]=set()
 				nodes.add(u)
 		else:
 			read=False
 	
-	    elif (line[0] == "A" and read):
+	    elif (line[0] == "A" and read and line.strip().split(" ")[6][0] != "f"):
 	        X = line.strip().split(" ")[1].split(",") 
 	        tb = line.strip().split(" ")[2].split(",")[0]
 	        te = line.strip().split(" ")[2].split(",")[1]
-	        tlimitb=line.strip().split(" ")[3].split(",")[1]
+	        tlimitb=line.strip().split(" ")[3].split(",")[0]
 		tlimite=line.strip().split(" ")[3].split(",")[1]
 		
+	        print line.strip().split(" ")[6] 
 		v = Clique((frozenset(X),(tb,te),(tlimitb,tlimite)))
 		
 		if not v in nodessuccess:
 			nodessuccess[v] = set()
 			nodespredecess[v]=set()
+			nodesextensionsuccess[v]=set()
+			nodesextensionpredecess[v]=set()
 			nodes.add(v)
 			stock.add(v)
 
@@ -56,12 +65,32 @@ while len(stock)!=0:
 		nodessuccess[u].add(v)
 		nodespredecess[v].add(u)
 		
+	    elif (line[0] == "A" and read and line.strip().split(" ")[6][0] == "f"):
+	        X = line.strip().split(" ")[1].split(",") 
+	        tb = line.strip().split(" ")[2].split(",")[0]
+	        te = line.strip().split(" ")[2].split(",")[1]
+	        tlimitb=line.strip().split(" ")[3].split(",")[0]
+		tlimite=line.strip().split(" ")[3].split(",")[1]
+		
+	        print line.strip().split(" ")[6] 
+		v = Clique((frozenset(X),(tb,te),(tlimitb,tlimite)))
+		
+		if not v in nodessuccess:
+			nodessuccess[v] = set()
+			nodespredecess[v]=set()
+			nodesextensionsuccess[v]=set()
+			nodesextensionpredecess[v]=set()
+			nodes.add(v)
+			stock.add(v)
+
+
+		nodesextensionsuccess[u].add(v)
+		nodesextensionpredecess[v].add(u)
 
 	    elif (line[0] == "R" and read):
 		nodes.remove(u)
-	 #       print u
 		X = line.strip().split(" ")[1].split(",") 
-	        tlimitb=line.strip().split(" ")[2].split(",")[1]
+	        tlimitb=line.strip().split(" ")[2].split(",")[0]
 		tlimite=line.strip().split(" ")[2].split(",")[1]
 		deltamin=line.strip().split(" ")[3]
 		deltamax=line.strip().split(" ")[4]
@@ -80,30 +109,76 @@ while len(stock)!=0:
 	f.seek(0)
 
 
+for c in reversenodescritiques:
+	print c
 
-
+for c in nodessuccess:
+	print 'node:'
+	print c
+	print 'success:'
+	for i in nodessuccess[c]:
+		print i
+	for i in nodesextensionsuccess[c]:
+		print i
+print 'modif'
 for c in nodes:
+	print 'node'
+	print c
+	print 'success'
 	for u in nodessuccess[c]:
+		print u
 		nodespredecess[u].remove(c)
 		for v in nodespredecess[c]:
 			nodespredecess[u].add(v)
 
+		for v in nodesextensionsuccess[c]:
+			nodesextensionsuccess[u].add(v)
+
+
 	for u in nodespredecess[c]:
+		print 'pred'
+		print u
+		print 'lala'
 		nodessuccess[u].remove(c)
 		for v in nodessuccess[c]:
+			print v
 			nodessuccess[u].add(v)
+
+
+
 	nodessuccess.pop(c)
 	nodespredecess.pop(c)
 
+
 nodesconfig=dict()
 
+print 'apres'
+for c in nodessuccess:
+	print 'node:'
+	print c
+	print 'success:'
+	for i in nodessuccess[c]:
+		print i
+
+	print 'predecess:'
+	for i in nodespredecess[c]:
+		print i
+	print 'extension'
+	for i in nodesextensionsuccess[c]:
+		print i
 for cc in nodescritiques:
 	nodesconfig[cc]=set()
 	for u in nodescritiques[cc]:
 		for v in nodessuccess[u]:
 			if not reversenodescritiques[v] == cc:
+				nodesconfig[cc].add(reversenodescritiques[v])
 
-				nodesconfig[cc].add(reversenodescritiques[v]) 
+		for v in nodesextensionsuccess[u]:
+			if not reversenodescritiques[v] == cc:
+
+				nodesconfig[cc].add(reversenodescritiques[v])
+
+
 	#	for v in nodespredecess[u]:
 	#		nodesconfig[cc].add(reversenodescritiques[v])		
 for c in nodescritiques:
@@ -133,7 +208,7 @@ for cc in nodesconfig:
         u = "({" + str(tuple(cc._X)) +"}, [" + str(cc._tlimitb) + ";" + str(cc._tlimite) + "], ["+str(cc._deltamin)+ ";" + str(cc._deltamax) + "])"
 	nodes.add(u)
 	for c in nodesconfig[cc]:
-        	v = "({" + str(tuple(c._X)) +"}, [" + str(c._tlimitb) + ";" + str(c._tlimite) +"], ["+str(cc._deltamin)+ ";" + str(cc._deltamax) + "])"
+        	v = "({" + str(tuple(c._X)) +"}, [" + str(c._tlimitb) + ";" + str(c._tlimite) +"], ["+str(c._deltamin)+ ";" + str(c._deltamax) + "])"
 		nodes.add(v)	
         	links +=  "\"" + u + "\" -- \"" + v +"\" [color=green];\n"
 
