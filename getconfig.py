@@ -73,8 +73,10 @@ while len(stock)!=0:
 		tlimite=line.strip().split(" ")[3].split(",")[1]
 		
 	        print line.strip().split(" ")[6] 
-		v = Clique((frozenset(X),(tb,te),(tlimitb,tlimite)))
-		
+		print u
+                
+                v = Clique((frozenset(X),(tb,te),(tlimitb,tlimite)))
+		print v
 		if not v in nodessuccess:
 			nodessuccess[v] = set()
 			nodespredecess[v]=set()
@@ -130,9 +132,14 @@ for c in nodes:
 		nodespredecess[u].remove(c)
 		for v in nodespredecess[c]:
 			nodespredecess[u].add(v)
+                 
+                if c not in  reversenodescritiques:
+		        for v in nodesextensionsuccess[c]:
+			        nodesextensionsuccess[u].add(v)
 
-		for v in nodesextensionsuccess[c]:
-			nodesextensionsuccess[u].add(v)
+                if c not in  reversenodescritiques:
+		        for v in nodesextensionpredecess[c]:
+			        nodesextensionpredecess[u].add(v)
 
 
 	for u in nodespredecess[c]:
@@ -148,7 +155,8 @@ for c in nodes:
 
 	nodessuccess.pop(c)
 	nodespredecess.pop(c)
-
+	nodesextensionsuccess.pop(c)
+	nodesextensionpredecess.pop(c)
 
 nodesconfig=dict()
 
@@ -174,7 +182,10 @@ for cc in nodescritiques:
 				nodesconfig[cc].add(reversenodescritiques[v])
 
 		for v in nodesextensionsuccess[u]:
-			if not reversenodescritiques[v] == cc:
+                        print v in reversenodescritiques
+                        print u
+                        print v
+                        if not reversenodescritiques[v] == cc:
 
 				nodesconfig[cc].add(reversenodescritiques[v])
 
