@@ -77,9 +77,13 @@ class TestClique(unittest.TestCase):
 
 			CliqueCritique((frozenset([1,2]), (1,1),0,2,1,1)),
 			CliqueCritique((frozenset([1,2]), (3,3),0,2,3,3)),
-			CliqueCritique((frozenset([1,2]), (1,3),2,5,1,3))
+			CliqueCritique((frozenset([1,2]), (1,3),2,5,3,1))
 		])
-		self.assertEqual(R, R_expected)
+		debug_msg = "\nGot :\n" + str(self.Cm)
+		debug_msg += "\nExpected :\n"
+		for c in R_expected:
+			debug_msg += str(c) + "\n"
+		self.assertEqual(R, R_expected, debug_msg)
 
 	def test_single_link_not_occurring_every_delta(self):
 		self.Cm._S = deque([
@@ -94,9 +98,13 @@ class TestClique(unittest.TestCase):
 
 		R_expected = set([
 			CliqueCritique((frozenset([1,2]), (1,1),0,1,1,1)),
-			CliqueCritique((frozenset([1,2]), (3,3),0,1,2,2))
+			CliqueCritique((frozenset([1,2]), (3,3),0,1,3,3))
 		])
-		self.assertEqual(R, R_expected)
+		debug_msg = "\nGot :\n" + str(self.Cm)
+		debug_msg += "\nExpected :\n"
+		for c in R_expected:
+			debug_msg += str(c) + "\n"
+		self.assertEqual(R, R_expected, debug_msg)
 		
 	def test_triangle_and_many_occurrences_with_delta_too_small(self):
 		self.Cm._S = deque([
@@ -138,7 +146,7 @@ class TestClique(unittest.TestCase):
 		R_expected = set([
 			CliqueCritique((frozenset([1,2]), (1,1),0,3,1,1)),
 			CliqueCritique((frozenset([1,2]), (4,4),0,3,4,4)),
-			CliqueCritique((frozenset([1,2]), (1,4),3,5,1,4)),
+			CliqueCritique((frozenset([1,2]), (1,4),3,5,4,1)),
 
 			CliqueCritique((frozenset([1,3]), (3,3),0,5,3,3)),
 			CliqueCritique((frozenset([2,3]), (2,2),0,5,2,2)),
@@ -147,7 +155,11 @@ class TestClique(unittest.TestCase):
 			CliqueCritique((frozenset([1,2,3]), (2,4),2,3,2,4)),
 			CliqueCritique((frozenset([1,2,3]), (1,4),3,5,2,3))
 		])
-		self.assertEqual(R, R_expected)
+		debug_msg = "\nGot :\n" + str(self.Cm)
+		debug_msg += "\nExpected :\n"
+		for c in R_expected:
+			debug_msg += str(c) + "\n"
+		self.assertEqual(R, R_expected, debug_msg)
 
 	def test_triangle_and_many_occurrences_with_delta_huge(self):
 		self.Cm._S = deque([
@@ -163,7 +175,7 @@ class TestClique(unittest.TestCase):
 		R_expected = set([
 			CliqueCritique((frozenset([1,2]), (1,1),0,3,1,1)),
 			CliqueCritique((frozenset([1,2]), (4,4),0,3,4,4)),
-			CliqueCritique((frozenset([1,2]), (1,4),3,100,1,4)),
+			CliqueCritique((frozenset([1,2]), (1,4),3,100,4,1)),
 
 			CliqueCritique((frozenset([1,3]), (3,3),0,100,3,3)),
 			CliqueCritique((frozenset([2,3]), (2,2),0,100,2,2)),
@@ -211,10 +223,10 @@ class TestClique(unittest.TestCase):
 
 		R = self.Cm.getTree(5)
 		R_expected = set([
-			CliqueCritique((frozenset([1,2,3]), (1,2),1,5,1,2)),
+			CliqueCritique((frozenset([1,2,3]), (1,2),1,5,1,1)),
 			CliqueCritique((frozenset([1,2,3]), (1,1),0,1,1,1)),
-			CliqueCritique((frozenset([2,3]), (1,2),1,5,1,2)),
-			CliqueCritique((frozenset([2,3]), (2,2),0,1,1,2))
+			CliqueCritique((frozenset([2,3]), (1,2),1,5,2,1)),
+			CliqueCritique((frozenset([2,3]), (2,2),0,1,2,2))
 		])
 		debug_msg = "\nGot :\n" + str(self.Cm)
 		debug_msg += "\nExpected :\n"
@@ -239,9 +251,9 @@ class TestClique(unittest.TestCase):
 			CliqueCritique((frozenset([2,3]), (2,2),0,10,2,2)),
 			CliqueCritique((frozenset([1,2]), (1,1),0,2,1,1)),
 			CliqueCritique((frozenset([1,2]), (3,3),0,2,3,3)),
-			CliqueCritique((frozenset([1,2]), (1,3),2,3,1,3)),
+			CliqueCritique((frozenset([1,2]), (1,3),2,3,3,1)),
 			CliqueCritique((frozenset([1,2]), (6,6),0,3,6,6)),
-			CliqueCritique((frozenset([1,2]), (1,6),3,10,1,6))
+			CliqueCritique((frozenset([1,2]), (1,6),3,10,6,1))
 		])
 		debug_msg = "\nGot :\n" + str(self.Cm)
 		debug_msg += "\nExpected :\n"
