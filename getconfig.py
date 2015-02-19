@@ -136,10 +136,14 @@ for c in nodes:
                 if c not in  reversenodescritiques:
 		        for v in nodesextensionsuccess[c]:
 			        nodesextensionsuccess[u].add(v)
+				nodesextensionpredecess[v].add(u)
+				#nodesextensionpredecess[v].remove(c)
 
                 if c not in  reversenodescritiques:
 		        for v in nodesextensionpredecess[c]:
 			        nodesextensionpredecess[u].add(v)
+				#nodesextensionsuccess[v].add(u)
+				#nodesextensionsuccess[v].remove(c)
 
 
 	for u in nodespredecess[c]:
