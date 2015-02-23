@@ -89,7 +89,7 @@ while len(stock)!=0:
 		nodesextensionsuccess[u].add(v)
 		nodesextensionpredecess[v].add(u)
 
-	    elif (line[0] == "R" and read):
+	    elif ((line[0] == "R" or line[0] == "T") and read):
 		nodes.remove(u)
 		X = line.strip().split(" ")[1].split(",") 
 	        tlimitb=line.strip().split(" ")[2].split(",")[0]

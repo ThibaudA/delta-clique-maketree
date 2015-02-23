@@ -158,13 +158,19 @@ class CliqueMaster:
 					#else:
 					#	c._deltamax=c_add._deltamin
 
-					if c._deltamax is not None:
-						    c._deltamax=None
-
-
 
 					sys.stderr.write("Adding " + str(c_add) + " from "+ str(c) +" (node extension)\n")
-					
+
+
+					if c._deltamax is not None:
+                                                    if c._deltamax>c._deltamin:
+				                        c_wannabe=CliqueCritique((c._X,(c._tlimitb,c._tlimite),c._deltamin,c._deltamax,td,tp))
+					                sys.stderr.write("Trying " + str(c_wannabe) + " but node extension\n")
+						    c._deltamax=None
+
+                                        
+
+			            	
                                         self.addClique(c_add)
 					
 					is_max = False
