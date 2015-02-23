@@ -159,8 +159,7 @@ class CliqueMaster:
 					#	c._deltamax=c_add._deltamin
 
 					if c._deltamax is not None:
-						if c._tb==c._te:
-							c._deltamax=None
+						    c._deltamax=None
 
 
 
