@@ -222,21 +222,21 @@ for c in nodesconfig:
 nodes = set()
 links = ""
 
-sys.stdout.write("graph G {\n")
+sys.stderr.write("graph G {\n")
 
 
 for cc in nodesconfig:
 	
         u = "({" + str(tuple(cc._X)) +"}, [" + str(cc._tlimitb) + ";" + str(cc._tlimite) + "], ["+str(cc._deltamin)+ ";" + str(cc._deltamax) + "])"
-	nodes.add(u)
+	nodes.add(u + "\"")
 	for c in nodesconfig[cc]:
         	v = "({" + str(tuple(c._X)) +"}, [" + str(c._tlimitb) + ";" + str(c._tlimite) +"], ["+str(c._deltamin)+ ";" + str(c._deltamax) + "])"
-		nodes.add(v)	
+		nodes.add(v + "\"")	
         	links +=  "\"" + u + "\" -- \"" + v +"\" [color=green];\n"
 
 for node in nodes:
-    sys.stdout.write("\"" + node + "\" [shape=ellipse];\n")
+    sys.stderr.write("\"" + node + " [shape=ellipse];\n")
 
-sys.stdout.write(links)
+sys.stderr.write(links)
 
-sys.stdout.write("}\n")
+sys.stderr.write("}\n")
