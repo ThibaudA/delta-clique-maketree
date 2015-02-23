@@ -10,7 +10,7 @@ import sys
 nodes=set()
 nodessuccess = dict()
 nodespredecess= dict()
-#test
+
 nodesextensionsuccess=dict()
 nodesextensionpredecess=dict()
 
@@ -128,6 +128,7 @@ for c in nodes:
 	print c
 	print 'success'
 	for u in nodessuccess[c]:
+                print " "
 		print u
 		nodespredecess[u].remove(c)
 		for v in nodespredecess[c]:
@@ -135,15 +136,14 @@ for c in nodes:
                  
                 if c not in  reversenodescritiques:
 		        for v in nodesextensionsuccess[c]:
+                                print v
 			        nodesextensionsuccess[u].add(v)
 				nodesextensionpredecess[v].add(u)
-				#nodesextensionpredecess[v].remove(c)
 
                 if c not in  reversenodescritiques:
 		        for v in nodesextensionpredecess[c]:
 			        nodesextensionpredecess[u].add(v)
-				#nodesextensionsuccess[v].add(u)
-				#nodesextensionsuccess[v].remove(c)
+				nodesextensionsuccess[v].add(u)
 
 
 	for u in nodespredecess[c]:
@@ -155,6 +155,13 @@ for c in nodes:
 			print v
 			nodessuccess[u].add(v)
 
+        if c not in reversenodescritiques: 
+            for u in nodesextensionsuccess[c]:
+                nodesextensionpredecess[u].remove(c)
+        
+            for u in nodesextensionpredecess[c]:
+                nodesextensionsuccess[u].remove(c)
+            
 
 
 	nodessuccess.pop(c)
