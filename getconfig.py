@@ -16,6 +16,10 @@ nodesextensionpredecess=dict()
 
 nodescritiques=dict()
 reversenodescritiques=dict()
+
+nodescritiquespotentiel=dict()
+reversenodescritiquespotentiel=dict()
+
 read=False
 stock=set()
 f=open(sys.argv[1])
@@ -89,7 +93,23 @@ while len(stock)!=0:
 		nodesextensionsuccess[u].add(v)
 		nodesextensionpredecess[v].add(u)
 
-	    elif ((line[0] == "R" or line[0] == "T") and read):
+	    elif (line[0] == "T" and read):
+		X = line.strip().split(" ")[1].split(",") 
+	        tlimitb=line.strip().split(" ")[2].split(",")[0]
+		tlimite=line.strip().split(" ")[2].split(",")[1]
+		deltamin=line.strip().split(" ")[3]
+		deltamax=line.strip().split(" ")[4]
+		td=line.strip().split(" ")[5]
+		tp=line.strip().split(" ")[6]
+
+		c=CliqueCritique(((frozenset(X),(tlimitb,tlimite),deltamin,deltamax,tp,td)))
+		if not c in nodescritiquespotentiel:
+			nodescritiquespotentiel[c]=set()
+		reversenodescritiquespotentiel[u]=c
+
+		nodescritiquespotentiel[c].add(u)
+
+	    elif (line[0] == "R"  and read):
 		nodes.remove(u)
 		X = line.strip().split(" ")[1].split(",") 
 	        tlimitb=line.strip().split(" ")[2].split(",")[0]
@@ -110,6 +130,17 @@ while len(stock)!=0:
 	#print map(str,stock)
 	f.seek(0)
 
+print 'test'
+for u in reversenodescritiquespotentiel:
+	
+	if reversenodescritiquespotentiel[u] in nodescritiques:
+		nodes.remove(u)
+		c=reversenodescritiquespotentiel[u]
+		reversenodescritiques[u]=c
+		nodescritiques[c].add(u)
+		print 'bla'
+
+print 'fin test'
 
 for c in reversenodescritiques:
 	print c
