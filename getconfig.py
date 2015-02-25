@@ -23,109 +23,107 @@ reversenodescritiquespotentiel=dict()
 read=False
 stock=set()
 f=open(sys.argv[1])
-stock.add(Clique((frozenset(sys.argv[2].strip().split(",")),(sys.argv[3].strip().split(",")[0],sys.argv[3].strip().split(",")[1]),(sys.argv[4].strip().split(",")[0],sys.argv[4].strip().split(",")[1]))))
 
-while len(stock)!=0:
-	for line in f:
-	    if line[0] == "G":
-	        X = line.strip().split(" ")[2].split(",")
-	        tb = line.strip().split(" ")[3].split(",")[0]
-	        te = line.strip().split(" ")[3].split(",")[1]
-		tlimitb=line.strip().split(" ")[4].split(",")[0]
-		tlimite=line.strip().split(" ")[4].split(",")[1]
-        
-		u = Clique((frozenset(X),(tb,te),(tlimitb,tlimite)))
-		if u in stock:
-			stock.remove(u)
-			read=True
-		        if not u in nodessuccess:
-				nodessuccess[u] = set()
-				nodespredecess[u]=set()
-				nodesextensionsuccess[u]=set()
-				nodesextensionpredecess[u]=set()
-				nodes.add(u)
-		else:
-			read=False
+startingnodes=frozenset(sys.argv[2].strip().split(","))
+startingtimes=(int(sys.argv[3].strip().split(",")[0]),int(sys.argv[3].strip().split(",")[1]))
+
+
+for line in f:
+    if line[0] == "G":
+        X = line.strip().split(" ")[2].split(",")
+        tb = line.strip().split(" ")[3].split(",")[0]
+        te = line.strip().split(" ")[3].split(",")[1]
+	tlimitb=line.strip().split(" ")[4].split(",")[0]
+	tlimite=line.strip().split(" ")[4].split(",")[1]
+       
+	u = Clique((frozenset(X),(tb,te),(tlimitb,tlimite)))
 	
-	    elif (line[0] == "A" and read and line.strip().split(" ")[6][0] != "f"):
-	        X = line.strip().split(" ")[1].split(",") 
-	        tb = line.strip().split(" ")[2].split(",")[0]
-	        te = line.strip().split(" ")[2].split(",")[1]
-	        tlimitb=line.strip().split(" ")[3].split(",")[0]
-		tlimite=line.strip().split(" ")[3].split(",")[1]
-		
-		v = Clique((frozenset(X),(tb,te),(tlimitb,tlimite)))
-		
-		if not v in nodessuccess:
-			nodessuccess[v] = set()
-			nodespredecess[v]=set()
-			nodesextensionsuccess[v]=set()
-			nodesextensionpredecess[v]=set()
-			nodes.add(v)
-			stock.add(v)
+	if ((int(tlimitb)>=startingtimes[0] and int(tlimitb)<=startingtimes[1]) or  (int(tlimite)>=startingtimes[0] and int(tlimitb)<=startingtimes[0])) and startingnodes.issubset(frozenset(X)): 
+		read=True
+	        if not u in nodessuccess:
+			nodessuccess[u] = set()
+			nodespredecess[u]=set()
+			nodesextensionsuccess[u]=set()
+			nodesextensionpredecess[u]=set()
+			nodes.add(u)
+	else:
+		read=False
+
+    elif (line[0] == "A" and read and line.strip().split(" ")[6][0] != "f"):
+        X = line.strip().split(" ")[1].split(",") 
+        tb = line.strip().split(" ")[2].split(",")[0]
+        te = line.strip().split(" ")[2].split(",")[1]
+        tlimitb=line.strip().split(" ")[3].split(",")[0]
+	tlimite=line.strip().split(" ")[3].split(",")[1]
+	
+	v = Clique((frozenset(X),(tb,te),(tlimitb,tlimite)))
+	
+	if not v in nodessuccess:
+		nodessuccess[v] = set()
+		nodespredecess[v]=set()
+		nodesextensionsuccess[v]=set()
+		nodesextensionpredecess[v]=set()
+		nodes.add(v)
 
 
-		nodessuccess[u].add(v)
-		nodespredecess[v].add(u)
+	nodessuccess[u].add(v)
+	nodespredecess[v].add(u)
 		
-	    elif (line[0] == "A" and read and line.strip().split(" ")[6][0] == "f"):
-	        X = line.strip().split(" ")[1].split(",") 
-	        tb = line.strip().split(" ")[2].split(",")[0]
-	        te = line.strip().split(" ")[2].split(",")[1]
-	        tlimitb=line.strip().split(" ")[3].split(",")[0]
-		tlimite=line.strip().split(" ")[3].split(",")[1]
+    elif (line[0] == "A" and read and line.strip().split(" ")[6][0] == "f"):
+        X = line.strip().split(" ")[1].split(",") 
+        tb = line.strip().split(" ")[2].split(",")[0]
+        te = line.strip().split(" ")[2].split(",")[1]
+        tlimitb=line.strip().split(" ")[3].split(",")[0]
+	tlimite=line.strip().split(" ")[3].split(",")[1]
 		
                 
-                v = Clique((frozenset(X),(tb,te),(tlimitb,tlimite)))
-		if not v in nodessuccess:
-			nodessuccess[v] = set()
-			nodespredecess[v]=set()
-			nodesextensionsuccess[v]=set()
-			nodesextensionpredecess[v]=set()
-			nodes.add(v)
-			stock.add(v)
+        v = Clique((frozenset(X),(tb,te),(tlimitb,tlimite)))
+	if not v in nodessuccess:
+		nodessuccess[v] = set()
+		nodespredecess[v]=set()
+		nodesextensionsuccess[v]=set()
+		nodesextensionpredecess[v]=set()
+		nodes.add(v)
 
 
-		nodesextensionsuccess[u].add(v)
-		nodesextensionpredecess[v].add(u)
+	nodesextensionsuccess[u].add(v)
+	nodesextensionpredecess[v].add(u)
 
-	    elif (line[0] == "T" and read):
-		X = line.strip().split(" ")[1].split(",") 
-	        tlimitb=line.strip().split(" ")[2].split(",")[0]
-		tlimite=line.strip().split(" ")[2].split(",")[1]
-		deltamin=line.strip().split(" ")[3]
-		deltamax=line.strip().split(" ")[4]
-		td=line.strip().split(" ")[5]
-		tp=line.strip().split(" ")[6]
+    elif (line[0] == "T" and read):
+	X = line.strip().split(" ")[1].split(",") 
+        tlimitb=line.strip().split(" ")[2].split(",")[0]
+	tlimite=line.strip().split(" ")[2].split(",")[1]
+	deltamin=line.strip().split(" ")[3]
+	deltamax=line.strip().split(" ")[4]
+	td=line.strip().split(" ")[5]
+	tp=line.strip().split(" ")[6]
 
-		c=CliqueCritique(((frozenset(X),(tlimitb,tlimite),deltamin,deltamax,tp,td)))
-		if not c in nodescritiquespotentiel:
-			nodescritiquespotentiel[c]=set()
-		reversenodescritiquespotentiel[u]=c
+	c=CliqueCritique(((frozenset(X),(tlimitb,tlimite),deltamin,deltamax,tp,td)))
+	if not c in nodescritiquespotentiel:
+		nodescritiquespotentiel[c]=set()
+	reversenodescritiquespotentiel[u]=c
 
-		nodescritiquespotentiel[c].add(u)
+	nodescritiquespotentiel[c].add(u)
 
-	    elif (line[0] == "R"  and read):
-		nodes.remove(u)
-		X = line.strip().split(" ")[1].split(",") 
-	        tlimitb=line.strip().split(" ")[2].split(",")[0]
-		tlimite=line.strip().split(" ")[2].split(",")[1]
-		deltamin=line.strip().split(" ")[3]
-		deltamax=line.strip().split(" ")[4]
-		td=line.strip().split(" ")[5]
-		tp=line.strip().split(" ")[6]
+    elif (line[0] == "R"  and read):
+	nodes.remove(u)
+	X = line.strip().split(" ")[1].split(",") 
+        tlimitb=line.strip().split(" ")[2].split(",")[0]
+	tlimite=line.strip().split(" ")[2].split(",")[1]
+	deltamin=line.strip().split(" ")[3]
+	deltamax=line.strip().split(" ")[4]
+	td=line.strip().split(" ")[5]
+	tp=line.strip().split(" ")[6]
 
-		c=CliqueCritique(((frozenset(X),(tlimitb,tlimite),deltamin,deltamax,tp,td)))
-		if not c in nodescritiques:
-			nodescritiques[c]=set()
-		reversenodescritiques[u]=c
+	c=CliqueCritique(((frozenset(X),(tlimitb,tlimite),deltamin,deltamax,tp,td)))
+	if not c in nodescritiques:
+		nodescritiques[c]=set()
+	reversenodescritiques[u]=c
 
-		nodescritiques[c].add(u)
+	nodescritiques[c].add(u)
 
-	f.seek(0)
-	sys.stderr.write("Iteration\n")
 
-sys.stderr.write("Data Loaded")
+sys.stderr.write("Data Loaded\n")
 
 for u in reversenodescritiquespotentiel:
 	
@@ -204,12 +202,12 @@ for u in nodesconfig:
 		ranks[u._deltamin]=set()
 
 
-for i in range(deltaminmax+1):
+for i in range(0,deltaminmax+1,20):
 	ordinate.append(str(i))
 
 
-for i in range(deltaminmax):
-	ordinatelinks+="\""+str(i) + "\" -- \"" + str(i+1)+ "\";\n"
+for i in range(len(ordinate)-1):
+	ordinatelinks+="\""+ordinate[i] + "\" -- \"" + ordinate[i+1]+ "\";\n"
 
 
 for node in ordinate:
@@ -225,17 +223,17 @@ sys.stdout.write(ordinatelinks)
 
 for cc in nodesconfig:
 	
-        u = "({" + str(tuple(cc._X)) +"}, [" + str(cc._tlimitb) + ";" + str(cc._tlimite) + "], ["+str(cc._deltamin)+ ";" + str(cc._deltamax) + "])"
+        u =  str(map(int,tuple(cc._X)))[1:-1] +"\\n" + str(cc._tlimitb) + "," + str(cc._tlimite) + "\\n"+str(cc._deltamin)+ "," + str(cc._deltamax) 
 	nodes.add(u + "\"")
 	ranks[cc._deltamin].add(u)
 	for c in nodesconfig[cc]:
-        	v = "({" + str(tuple(c._X)) +"}, [" + str(c._tlimitb) + ";" + str(c._tlimite) +"], ["+str(c._deltamin)+ ";" + str(c._deltamax) + "])"
+        	v =  str(map(int,tuple(c._X)))[1:-1] +"\\n" + str(c._tlimitb) + "," + str(c._tlimite) +"\\n"+str(c._deltamin)+ "," + str(c._deltamax)
 		nodes.add(v + "\"")
 		ranks[c._deltamin].add(v)
         	links +=  "\"" + u + "\" -- \"" + v +"\" [color=black];\n"
 
 for node in nodes:
-    sys.stdout.write("\"" + node + " [shape=ellipse];\n")
+    sys.stdout.write("\"" + node + " [shape=plaintext];\n")
 
 
 sys.stdout.write(links)
