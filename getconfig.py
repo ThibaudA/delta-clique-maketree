@@ -54,7 +54,6 @@ while len(stock)!=0:
 	        tlimitb=line.strip().split(" ")[3].split(",")[0]
 		tlimite=line.strip().split(" ")[3].split(",")[1]
 		
-	        print line.strip().split(" ")[6] 
 		v = Clique((frozenset(X),(tb,te),(tlimitb,tlimite)))
 		
 		if not v in nodessuccess:
@@ -76,11 +75,8 @@ while len(stock)!=0:
 	        tlimitb=line.strip().split(" ")[3].split(",")[0]
 		tlimite=line.strip().split(" ")[3].split(",")[1]
 		
-	        print line.strip().split(" ")[6] 
-		print u
                 
                 v = Clique((frozenset(X),(tb,te),(tlimitb,tlimite)))
-		print v
 		if not v in nodessuccess:
 			nodessuccess[v] = set()
 			nodespredecess[v]=set()
@@ -126,11 +122,11 @@ while len(stock)!=0:
 
 		nodescritiques[c].add(u)
 
-
-	#print map(str,stock)
 	f.seek(0)
+	sys.stderr.write("Iteration\n")
 
-print 'test'
+sys.stderr.write("Data Loaded")
+
 for u in reversenodescritiquespotentiel:
 	
 	if reversenodescritiquespotentiel[u] in nodescritiques:
@@ -138,36 +134,16 @@ for u in reversenodescritiquespotentiel:
 		c=reversenodescritiquespotentiel[u]
 		reversenodescritiques[u]=c
 		nodescritiques[c].add(u)
-		print 'bla'
 
-print 'fin test'
 
-for c in reversenodescritiques:
-	print c
-
-for c in nodessuccess:
-	print 'node:'
-	print c
-	print 'success:'
-	for i in nodessuccess[c]:
-		print i
-	for i in nodesextensionsuccess[c]:
-		print i
-print 'modif'
 for c in nodes:
-	print 'node'
-	print c
-	print 'success'
 	for u in nodessuccess[c]:
-                print " "
-		print u
 		nodespredecess[u].remove(c)
 		for v in nodespredecess[c]:
 			nodespredecess[u].add(v)
                  
                 if c not in  reversenodescritiques:
 		        for v in nodesextensionsuccess[c]:
-                                print v
 			        nodesextensionsuccess[u].add(v)
 				nodesextensionpredecess[v].add(u)
 
@@ -178,12 +154,8 @@ for c in nodes:
 
 
 	for u in nodespredecess[c]:
-		print 'pred'
-		print u
-		print 'lala'
 		nodessuccess[u].remove(c)
 		for v in nodessuccess[c]:
-			print v
 			nodessuccess[u].add(v)
 
         if c not in reversenodescritiques: 
@@ -201,21 +173,6 @@ for c in nodes:
 	nodesextensionpredecess.pop(c)
 
 nodesconfig=dict()
-
-print 'apres'
-for c in nodessuccess:
-	print 'node:'
-	print c
-	print 'success:'
-	for i in nodessuccess[c]:
-		print i
-
-	print 'predecess:'
-	for i in nodespredecess[c]:
-		print i
-	print 'extension'
-	for i in nodesextensionsuccess[c]:
-		print i
 for cc in nodescritiques:
 	nodesconfig[cc]=set()
 	for u in nodescritiques[cc]:
@@ -224,50 +181,69 @@ for cc in nodescritiques:
 				nodesconfig[cc].add(reversenodescritiques[v])
 
 		for v in nodesextensionsuccess[u]:
-                        print v in reversenodescritiques
-                        print u
-                        print v
                         if not reversenodescritiques[v] == cc:
 
 				nodesconfig[cc].add(reversenodescritiques[v])
 
 
-	#	for v in nodespredecess[u]:
-	#		nodesconfig[cc].add(reversenodescritiques[v])		
-for c in nodescritiques:
-	print "nodes"
-	print c
-	print "link"
-	for l in nodescritiques[c]:
-		print l
-
-for c in nodesconfig:
-	print "nodes config"
-	print c
-	print "link"
-	for l in nodesconfig[c]:
-		print l
-
-
-
 nodes = set()
 links = ""
 
-sys.stderr.write("graph G {\n")
+ordinate=list()
+ordinatelinks=""
+
+ranks=dict()
+
+deltaminmax=0
+
+sys.stdout.write("graph G {\n")
+sys.stdout.write("ranksep=equally;\n")
+for u in nodesconfig:
+	deltaminmax=max(int(deltaminmax),int(u._deltamin))
+	if  u._deltamin not in ranks:
+		ranks[u._deltamin]=set()
+
+
+for i in range(deltaminmax+1):
+	ordinate.append(str(i))
+
+
+for i in range(deltaminmax):
+	ordinatelinks+="\""+str(i) + "\" -- \"" + str(i+1)+ "\";\n"
+
+
+for node in ordinate:
+	if node in ranks:
+    		sys.stdout.write("\"" + node + "\" [shape=ellipse];\n")
+	else:
+
+    		sys.stdout.write("\"" + node + "\" [shape=point];\n")
+
+
+sys.stdout.write(ordinatelinks)
 
 
 for cc in nodesconfig:
 	
         u = "({" + str(tuple(cc._X)) +"}, [" + str(cc._tlimitb) + ";" + str(cc._tlimite) + "], ["+str(cc._deltamin)+ ";" + str(cc._deltamax) + "])"
 	nodes.add(u + "\"")
+	ranks[cc._deltamin].add(u)
 	for c in nodesconfig[cc]:
         	v = "({" + str(tuple(c._X)) +"}, [" + str(c._tlimitb) + ";" + str(c._tlimite) +"], ["+str(c._deltamin)+ ";" + str(c._deltamax) + "])"
-		nodes.add(v + "\"")	
-        	links +=  "\"" + u + "\" -- \"" + v +"\" [color=green];\n"
+		nodes.add(v + "\"")
+		ranks[c._deltamin].add(v)
+        	links +=  "\"" + u + "\" -- \"" + v +"\" [color=black];\n"
 
 for node in nodes:
-    sys.stderr.write("\"" + node + " [shape=ellipse];\n")
+    sys.stdout.write("\"" + node + " [shape=ellipse];\n")
 
-sys.stderr.write(links)
 
-sys.stderr.write("}\n")
+sys.stdout.write(links)
+
+for deltamin in ranks:
+	ranklist=""
+	for u in ranks[deltamin]:
+		ranklist+="; \""+str(u)+"\""
+	sys.stdout.write("{ rank = same; \"" + str(deltamin) + "\"" + ranklist  + "}\n")
+
+sys.stdout.write("}\n")
