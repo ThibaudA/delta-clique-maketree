@@ -101,6 +101,7 @@ class CliqueMaster:
 							c._deltamax=min(c._deltamax,tp-new_t)
 						elif time_extension is not None:
 							if tp-new_t<=time_extension: c._deltamax=tp-new_t
+							#sinon
 						else: c._deltamax=tp-new_t
 					    	
 					else:	
@@ -114,6 +115,7 @@ class CliqueMaster:
 						
 						if tp-new_t<c._deltamax:
 							c._deltamax = None
+							#sinon
 
 
                                         self.addClique(c_add)
@@ -176,10 +178,14 @@ class CliqueMaster:
 					is_max = False
 			
 
-			if c._deltamax is not None and c._deltamax>c._deltamin:
-				c_add=CliqueCritique((c._X,(c._tlimitb,c._tlimite),c._deltamin,c._deltamax,td,tp))
-				self._R.add(c_add)
-				sys.stderr.write("Return " + str(c_add) + "\n")
+			if c._deltamax is not None:
+				if c._deltamax>c._deltamin:
+					c_add=CliqueCritique((c._X,(c._tlimitb,c._tlimite),c._deltamin,c._deltamax,td,tp))
+					self._R.add(c_add)
+					sys.stderr.write("Return " + str(c_add) + "\n")
+				else:
+					c_add=CliqueCritique((c._X,(c._tlimitb,c._tlimite),c._deltamin,c._deltamax,td,tp))
+					sys.stderr.write("Trying " + str(c_add) + " but deltamin = deltamax\n")
 
 			if is_max: #deltamax=delta + add c to R
 				sys.stderr.write(str(c) + " is maximal\n")

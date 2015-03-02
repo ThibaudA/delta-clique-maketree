@@ -8,6 +8,7 @@ import matplotlib.pyplot as plt
 import operator
 import sys
 nodes=set()
+bannednodes=set()
 nodessuccess = dict()
 nodespredecess= dict()
 
@@ -45,7 +46,7 @@ for line in f:
 			nodespredecess[u]=set()
 			nodesextensionsuccess[u]=set()
 			nodesextensionpredecess[u]=set()
-			nodes.add(u)
+		nodes.add(u)
 	else:
 		read=False
 
@@ -77,19 +78,19 @@ for line in f:
 	tlimite=line.strip().split(" ")[3].split(",")[1]
 		
                 
-        v = Clique((frozenset(X),(tb,te),(tlimitb,tlimite)))
-	if not v in nodessuccess:
-		nodessuccess[v] = set()
-		nodespredecess[v]=set()
-		nodesextensionsuccess[v]=set()
-		nodesextensionpredecess[v]=set()
-		nodes.add(v)
+        w = Clique((frozenset(X),(tb,te),(tlimitb,tlimite)))
+	if not w in nodessuccess:
+		nodessuccess[w] = set()
+		nodespredecess[w]=set()
+		nodesextensionsuccess[w]=set()
+		nodesextensionpredecess[w]=set()
+		nodes.add(w)
 
 
-	nodesextensionsuccess[u].add(v)
-	nodesextensionpredecess[v].add(u)
+	nodesextensionsuccess[u].add(w)
+	nodesextensionpredecess[w].add(u)
 
-    elif (line[0] == "T" and read):
+    elif (line[0] == "T" and line.strip().split(" ")[7][0] == "n" and read):
 	X = line.strip().split(" ")[1].split(",") 
         tlimitb=line.strip().split(" ")[2].split(",")[0]
 	tlimite=line.strip().split(" ")[2].split(",")[1]
@@ -104,9 +105,8 @@ for line in f:
 	reversenodescritiquespotentiel[u]=c
 
 	nodescritiquespotentiel[c].add(u)
-
-    elif (line[0] == "R"  and read):
-	nodes.remove(u)
+        
+    elif (line[0] == "T" and line.strip().split(" ")[8][0] == "d" and read):
 	X = line.strip().split(" ")[1].split(",") 
         tlimitb=line.strip().split(" ")[2].split(",")[0]
 	tlimite=line.strip().split(" ")[2].split(",")[1]
@@ -116,6 +116,23 @@ for line in f:
 	tp=line.strip().split(" ")[6]
 
 	c=CliqueCritique(((frozenset(X),(tlimitb,tlimite),deltamin,deltamax,tp,td)))
+	bannednodes.add(u)
+	if not c in nodescritiques:
+		nodescritiques[c]=set()
+	reversenodescritiques[u]=c
+	nodescritiques[c].add(u)
+   
+    elif (line[0] == "R"  and read):
+	X = line.strip().split(" ")[1].split(",") 
+        tlimitb=line.strip().split(" ")[2].split(",")[0]
+	tlimite=line.strip().split(" ")[2].split(",")[1]
+	deltamin=line.strip().split(" ")[3]
+	deltamax=line.strip().split(" ")[4]
+	td=line.strip().split(" ")[5]
+	tp=line.strip().split(" ")[6]
+
+	c=CliqueCritique(((frozenset(X),(tlimitb,tlimite),deltamin,deltamax,tp,td)))
+	nodes.remove(u)
 	if not c in nodescritiques:
 		nodescritiques[c]=set()
 	reversenodescritiques[u]=c
@@ -124,6 +141,10 @@ for line in f:
 
 
 sys.stderr.write("Data Loaded\n")
+
+nodes.difference_update(bannednodes)
+
+
 
 for u in reversenodescritiquespotentiel:
 	
@@ -170,6 +191,50 @@ for c in nodes:
 	nodesextensionsuccess.pop(c)
 	nodesextensionpredecess.pop(c)
 
+nodescritiquesiteration=nodescritiques.copy()
+
+for cc in nodescritiquesiteration:
+	if cc._deltamax<cc._deltamin:
+		for u in nodescritiquesiteration[cc]:
+			for v in nodespredecess[u]:
+				nodessuccess[v].remove(u)
+			for v in nodessuccess[u]:
+				nodespredecess[v].remove(u)
+			for v in nodesextensionpredecess[u]:
+				nodesextrensionsuccess[v].remove(u)
+			for v in nodesextensionsuccess[u]:
+				nodesextensionpredecess[v].remove(u)
+		nodescritiques.pop(cc)
+
+	elif cc._deltamax == cc._deltamin:
+		tousegaux=True
+		for u in nodescritiques[cc]:
+			 for v in nodespredecess[u]:
+				 if not reversenodescritiques[v]._deltamax==cc._deltamin:
+					 tousegaux=False
+
+
+		if tousegaux:
+			sys.stderr.write("egaux\n")
+
+
+		else:
+			for u in nodescritiquesiteration[cc]:
+				for v in nodespredecess[u]:
+					nodessuccess[v].remove(u)
+				for v in nodessuccess[u]:
+					nodespredecess[v].remove(u)
+				for v in nodesextensionpredecess[u]:
+					nodesextrensionsuccess[v].remove(u)
+				for v in nodesextensionsuccess[u]:
+					nodesextensionpredecess[v].remove(u)
+			nodescritiques.pop(cc)
+
+	
+	
+
+
+
 nodesconfig=dict()
 for cc in nodescritiques:
 	nodesconfig[cc]=set()
@@ -196,13 +261,14 @@ deltaminmax=0
 
 sys.stdout.write("graph G {\n")
 sys.stdout.write("ranksep=equally;\n")
+sys.stdout.write("splines=line;\n")
 for u in nodesconfig:
 	deltaminmax=max(int(deltaminmax),int(u._deltamin))
 	if  u._deltamin not in ranks:
 		ranks[u._deltamin]=set()
 
 
-for i in range(0,deltaminmax+1,20):
+for i in range(0,deltaminmax+1,1):
 	ordinate.append(str(i))
 
 
@@ -212,7 +278,7 @@ for i in range(len(ordinate)-1):
 
 for node in ordinate:
 	if node in ranks:
-    		sys.stdout.write("\"" + node + "\" [shape=ellipse];\n")
+    		sys.stdout.write("\"" + node + "\" [shape=plaintext];\n")
 	else:
 
     		sys.stdout.write("\"" + node + "\" [shape=point];\n")
@@ -233,7 +299,7 @@ for cc in nodesconfig:
         	links +=  "\"" + u + "\" -- \"" + v +"\" [color=black];\n"
 
 for node in nodes:
-    sys.stdout.write("\"" + node + " [shape=plaintext];\n")
+    sys.stdout.write("\"" + node + " [shape=none];\n")
 
 
 sys.stdout.write(links)
