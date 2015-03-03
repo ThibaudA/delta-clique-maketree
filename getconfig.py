@@ -86,11 +86,10 @@ for line in f:
 		nodesextensionpredecess[w]=set()
 		nodes.add(w)
 
-
 	nodesextensionsuccess[u].add(w)
 	nodesextensionpredecess[w].add(u)
 
-    elif (line[0] == "T" and line.strip().split(" ")[7][0] == "n" and read):
+    elif (line[0] == "T" and line.strip().split(" ")[8][0] == "n" and read):
 	X = line.strip().split(" ")[1].split(",") 
         tlimitb=line.strip().split(" ")[2].split(",")[0]
 	tlimite=line.strip().split(" ")[2].split(",")[1]
@@ -105,7 +104,24 @@ for line in f:
 	reversenodescritiquespotentiel[u]=c
 
 	nodescritiquespotentiel[c].add(u)
-        
+
+    elif (line[0] == "T" and line.strip().split(" ")[8][0] == "t" and read):
+	X = line.strip().split(" ")[1].split(",") 
+        tlimitb=line.strip().split(" ")[2].split(",")[0]
+	tlimite=line.strip().split(" ")[2].split(",")[1]
+	deltamin=line.strip().split(" ")[3]
+	deltamax=line.strip().split(" ")[4]
+	td=line.strip().split(" ")[5]
+	tp=line.strip().split(" ")[6]
+
+	c=CliqueCritique(((frozenset(X),(tlimitb,tlimite),deltamin,deltamax,tp,td)))
+	if not c in nodescritiquespotentiel:
+		nodescritiquespotentiel[c]=set()
+	reversenodescritiquespotentiel[u]=c
+
+	nodescritiquespotentiel[c].add(u)
+
+
     elif (line[0] == "T" and line.strip().split(" ")[8][0] == "d" and read):
 	X = line.strip().split(" ")[1].split(",") 
         tlimitb=line.strip().split(" ")[2].split(",")[0]
@@ -147,12 +163,13 @@ nodes.difference_update(bannednodes)
 
 
 for u in reversenodescritiquespotentiel:
-	
+		
 	if reversenodescritiquespotentiel[u] in nodescritiques:
 		nodes.remove(u)
 		c=reversenodescritiquespotentiel[u]
 		reversenodescritiques[u]=c
 		nodescritiques[c].add(u)
+	
 
 
 for c in nodes:
@@ -215,8 +232,42 @@ for cc in nodescritiquesiteration:
 
 
 		if tousegaux:
-			sys.stderr.write("egaux\n")
+			for c in nodescritiquesiteration[cc]:
+				for u in nodessuccess[c]:
+					nodespredecess[u].remove(c)
+					for v in nodespredecess[c]:
+						nodespredecess[u].add(v)
+                 
+                		if c not in  reversenodescritiques:
+		        		for v in nodesextensionsuccess[c]:
+			        		nodesextensionsuccess[u].add(v)
+						nodesextensionpredecess[v].add(u)
+		
+        	        	if c not in  reversenodescritiques:
+			      		for v in nodesextensionpredecess[c]:
+					        nodesextensionpredecess[u].add(v)
+						nodesextensionsuccess[v].add(u)
 
+
+				for u in nodespredecess[c]:
+					nodessuccess[u].remove(c)
+					for v in nodessuccess[c]:
+						nodessuccess[u].add(v)
+
+				if c not in reversenodescritiques: 
+					for u in nodesextensionsuccess[c]:
+       	        			 	nodesextensionpredecess[u].remove(c)
+        	
+            			for u in nodesextensionpredecess[c]:
+                			nodesextensionsuccess[u].remove(c)
+            
+
+
+				nodessuccess.pop(c)
+				nodespredecess.pop(c)
+				nodesextensionsuccess.pop(c)
+				nodesextensionpredecess.pop(c)
+			nodescritiques.pop(cc)
 
 		else:
 			for u in nodescritiquesiteration[cc]:

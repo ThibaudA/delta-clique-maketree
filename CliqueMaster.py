@@ -100,8 +100,12 @@ class CliqueMaster:
 						if c._deltamax is not None:
 							c._deltamax=min(c._deltamax,tp-new_t)
 						elif time_extension is not None:
-							if tp-new_t<=time_extension: c._deltamax=tp-new_t
-							#sinon
+							if tp-new_t<=time_extension: 
+								c._deltamax=tp-new_t
+							else:
+								#sinon
+				                        	c_wannabe=CliqueCritique((c._X,(c._tlimitb,c._tlimite),c._deltamin,time_extension,td,tp))
+								sys.stderr.write("Trying " + str(c_wannabe) + " but time extension\n")
 						else: c._deltamax=tp-new_t
 					    	
 					else:	
@@ -115,7 +119,8 @@ class CliqueMaster:
 						
 						if tp-new_t<c._deltamax:
 							c._deltamax = None
-							#sinon
+							c_wannabe=CliqueCritique((c._X,(c._tlimitb,c._tlimite),c._deltamin,tp-new_t,td,tp))
+							sys.stderr.write("Trying " + str(c_wannabe) + " but time extension\n")
 
 
                                         self.addClique(c_add)
