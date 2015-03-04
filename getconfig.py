@@ -211,26 +211,12 @@ for c in nodes:
 nodescritiquesiteration=nodescritiques.copy()
 
 for cc in nodescritiquesiteration:
-	if cc._deltamax<cc._deltamin:
-		for u in nodescritiquesiteration[cc]:
-			for v in nodespredecess[u]:
-				nodessuccess[v].remove(u)
-			for v in nodessuccess[u]:
-				nodespredecess[v].remove(u)
-			for v in nodesextensionpredecess[u]:
-				nodesextrensionsuccess[v].remove(u)
-			for v in nodesextensionsuccess[u]:
-				nodesextensionpredecess[v].remove(u)
-		nodescritiques.pop(cc)
-
-	elif cc._deltamax == cc._deltamin:
+	if int(cc._deltamax) <= int(cc._deltamin):
 		tousegaux=True
 		for u in nodescritiques[cc]:
-			 for v in nodespredecess[u]:
+			 for v in nodespredecess[u].difference(nodescritiques[cc]):
 				 if not reversenodescritiques[v]._deltamax==cc._deltamin:
 					 tousegaux=False
-
-
 		if tousegaux:
 			for c in nodescritiquesiteration[cc]:
 				for u in nodessuccess[c]:
@@ -238,15 +224,15 @@ for cc in nodescritiquesiteration:
 					for v in nodespredecess[c]:
 						nodespredecess[u].add(v)
                  
-                		if c not in  reversenodescritiques:
-		        		for v in nodesextensionsuccess[c]:
-			        		nodesextensionsuccess[u].add(v)
-						nodesextensionpredecess[v].add(u)
+                			if c not in  reversenodescritiques:
+		        			for v in nodesextensionsuccess[c]:
+			        			nodesextensionsuccess[u].add(v)
+							nodesextensionpredecess[v].add(u)
 		
-        	        	if c not in  reversenodescritiques:
-			      		for v in nodesextensionpredecess[c]:
-					        nodesextensionpredecess[u].add(v)
-						nodesextensionsuccess[v].add(u)
+        	        		if c not in  reversenodescritiques:
+			      			for v in nodesextensionpredecess[c]:
+					        	nodesextensionpredecess[u].add(v)
+							nodesextensionsuccess[v].add(u)
 
 
 				for u in nodespredecess[c]:
@@ -254,11 +240,11 @@ for cc in nodescritiquesiteration:
 					for v in nodessuccess[c]:
 						nodessuccess[u].add(v)
 
-				if c not in reversenodescritiques: 
-					for u in nodesextensionsuccess[c]:
-       	        			 	nodesextensionpredecess[u].remove(c)
+				#if c not in reversenodescritiques: 
+				for u in nodesextensionsuccess[c]:
+       	        		 	nodesextensionpredecess[u].remove(c)
         	
-            			for u in nodesextensionpredecess[c]:
+        	    		for u in nodesextensionpredecess[c]:
                 			nodesextensionsuccess[u].remove(c)
             
 
@@ -276,7 +262,7 @@ for cc in nodescritiquesiteration:
 				for v in nodessuccess[u]:
 					nodespredecess[v].remove(u)
 				for v in nodesextensionpredecess[u]:
-					nodesextrensionsuccess[v].remove(u)
+					nodesextensionsuccess[v].remove(u)
 				for v in nodesextensionsuccess[u]:
 					nodesextensionpredecess[v].remove(u)
 			nodescritiques.pop(cc)
@@ -300,6 +286,8 @@ for cc in nodescritiques:
 				nodesconfig[cc].add(reversenodescritiques[v])
 
 
+
+
 nodes = set()
 links = ""
 
@@ -319,7 +307,7 @@ for u in nodesconfig:
 		ranks[u._deltamin]=set()
 
 
-for i in range(0,deltaminmax+1,1):
+for i in range(0,deltaminmax+1,20):
 	ordinate.append(str(i))
 
 
