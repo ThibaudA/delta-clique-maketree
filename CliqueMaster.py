@@ -176,7 +176,8 @@ class CliqueMaster:
 						    c._deltamax=None
 
                                         
-
+					if is_max == True:
+						c._deltamax=c_add._deltamin 
 			            	
                                         self.addClique(c_add)
 					

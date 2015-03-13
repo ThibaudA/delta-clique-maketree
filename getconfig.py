@@ -240,12 +240,12 @@ for cc in nodescritiquesiteration:
 					for v in nodessuccess[c]:
 						nodessuccess[u].add(v)
 
-				#if c not in reversenodescritiques: 
-				for u in nodesextensionsuccess[c]:
-       	        		 	nodesextensionpredecess[u].remove(c)
+				if c not in reversenodescritiques: 
+					for u in nodesextensionsuccess[c]:
+       	        		 		nodesextensionpredecess[u].remove(c)
         	
-        	    		for u in nodesextensionpredecess[c]:
-                			nodesextensionsuccess[u].remove(c)
+        		    		for u in nodesextensionpredecess[c]:
+               					nodesextensionsuccess[u].remove(c)
             
 
 
