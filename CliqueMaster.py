@@ -11,7 +11,6 @@ class CliqueMaster:
 	def __init__(self):
 		self._S = deque()
 		self._S_set = set()
-		self._interset = set()
 		self._R = set()
 		self._times = dict()
 		self._nodes = dict()
@@ -77,11 +76,11 @@ class CliqueMaster:
 					    time_extension=new_t-td
 
 					    sys.stderr.write("Adding " + str(c_add) + " (time extension)\n")
-					    self._interset.add(c_add)
+					    self.addClique(c_add)
 				else:
 					c_add = Clique((c._X, (c._tb, td + delta),(c._tlimitb,c._tlimite)),c._candidates)
 					c_add._deltamin=c._deltamin
-					self._interset.add(c_add)
+					self.addClique(c_add)
 					sys.stderr.write("Adding " + str(c_add) + " (time delta extension)\n")
 				is_max = False
 			else:
@@ -128,12 +127,12 @@ class CliqueMaster:
 							sys.stderr.write("Trying " + str(c_wannabe) + " but time extension\n")
 
 
-                                        	self._interset.add(c_add)
+                                        	self.addClique(c_add)
 						sys.stderr.write("Adding " + str(c_add) + " (left time extension)\n")
 				else:
 					c_add = Clique((c._X, (tp - delta, c._te),(c._tlimitb,c._tlimite)),c._candidates)
 					c_add._deltamin=c._deltamin
-					self._interset.add(c_add)
+					self.addClique(c_add)
 					sys.stderr.write("Adding " + str(c_add) + " (left time delta extension)\n")
 				is_max = False
 			else:
@@ -167,31 +166,19 @@ class CliqueMaster:
 				                        c_wannabe=CliqueCritique((c._X,(c._tlimitb,c._tlimite),c._deltamin,c._deltamax,td,tp))
 					                sys.stderr.write("Trying " + str(c_wannabe) + " but node extension\n")
 						    c._deltamax=None
+				
 					
-					if c._deltamin_successeur is not None: 
-						c._deltamin_successeur=min(c._deltamin_successeur,c_add._deltamin)
-					else:
-						c._deltamin_successeur=c._deltamin_successeur
-					
-                                        
-					if c_add._deltamin == c._deltamin:
-						c._never_max = True
+                                       
 
-
-					if is_max == True and not c._never_max:
-						c._deltamax=c._deltamin_successeur 
+					#if is_max == True :
+					#	c._deltamax=c_add._deltamin
 			            	
                                         self.addClique(c_add)
 					
 					is_max = False
 			
 	
-			for c_add in self._interset:
-				c_add._deltamin_successeur=c._deltamin_successeur
-				c_add._never_max=c._never_max
-				self.addClique(c_add)
-
-			self._interset=set()
+			self._intersetx=set()
 			if c._deltamax is not None:
 				if c._deltamax>c._deltamin:
 					c_add=CliqueCritique((c._X,(c._tlimitb,c._tlimite),c._deltamin,c._deltamax,td,tp))
@@ -201,8 +188,7 @@ class CliqueMaster:
 					c_add=CliqueCritique((c._X,(c._tlimitb,c._tlimite),c._deltamin,c._deltamax,td,tp))
 					sys.stderr.write("Trying " + str(c_add) + " but deltamin = deltamax\n")
 
-			if is_max and not c._never_max : #deltamax=delta + add c to R
-				print c
+			if is_max : #deltamax=delta + add c to R
 				sys.stderr.write(str(c) + " is maximal\n")
 				c_add=CliqueCritique((c._X,(c._tlimitb,c._tlimite),c._deltamin,delta,td,tp))
 				self._R.add(c_add)
