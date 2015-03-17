@@ -292,9 +292,6 @@ class TestClique(unittest.TestCase):
 			debug_msg += str(c) + "\n"
 		self.assertEqual(R, R_expected, debug_msg)
 
-
-
-
 	def test_ajoutdenoeudwhenmaxsuivitdajoutdelien(self):
 		self.Cm._S = deque([
 		    Clique((frozenset([1, 3]), (1, 1),(1,1))),
@@ -324,6 +321,9 @@ class TestClique(unittest.TestCase):
 		for c in R_expected:
 			debug_msg += str(c) + "\n"
 		self.assertEqual(R, R_expected, debug_msg)
+
+
+
 
 if __name__ == '__main__':
 	suite = unittest.TestLoader().loadTestsFromTestCase(TestClique)
