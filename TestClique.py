@@ -291,6 +291,40 @@ class TestClique(unittest.TestCase):
 		for c in R_expected:
 			debug_msg += str(c) + "\n"
 		self.assertEqual(R, R_expected, debug_msg)
+
+
+
+
+	def test_ajoutdenoeudwhenmaxsuivitdajoutdelien(self):
+		self.Cm._S = deque([
+		    Clique((frozenset([1, 3]), (1, 1),(1,1))),
+		    Clique((frozenset([1, 2]), (2, 2),(2,2))),
+		    Clique((frozenset([2, 3]), (2, 2),(2,2))),
+		    Clique((frozenset([1, 3]), (3, 3),(3,3))),
+		    Clique((frozenset([1, 3]), (5, 5),(5,5))),
+		])
+		self.Cm._nodes = {1: set([2,3]), 2: set([1, 3]), 3: set([1,2])}
+		self.Cm._times = {frozenset([1, 2]): [2], frozenset([2, 3]): [2],frozenset([1, 3]): [1,3,5]}
+
+		R = self.Cm.getTree(5)
+		R_expected = set([
+			
+			CliqueCritique((frozenset([1,3]), (4,4),0,3,4,4)),
+			CliqueCritique((frozenset([1,3]), (1,1),0,3,1,1)),
+			CliqueCritique((frozenset([1,3]), (1,4),3,5,4,1)),
+			CliqueCritique((frozenset([1,2]), (2,2),0,3,2,2)),
+			CliqueCritique((frozenset([2,3]), (2,2),0,3,2,2)),
+
+			CliqueCritique((frozenset([1,2,3]), (1,2),1,3,1,2)),
+			CliqueCritique((frozenset([1,2,3]), (2,4),2,3,2,4)),
+			CliqueCritique((frozenset([1,2,3]), (1,4),3,5,2,2))
+		])
+		debug_msg = "\nGot :\n" + str(self.Cm)
+		debug_msg += "\nExpected :\n"
+		for c in R_expected:
+			debug_msg += str(c) + "\n"
+		self.assertEqual(R, R_expected, debug_msg)
+
 if __name__ == '__main__':
 	suite = unittest.TestLoader().loadTestsFromTestCase(TestClique)
 	unittest.TextTestRunner(verbosity=2).run(suite)
