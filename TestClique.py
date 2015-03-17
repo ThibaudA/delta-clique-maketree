@@ -303,18 +303,22 @@ class TestClique(unittest.TestCase):
 		self.Cm._nodes = {1: set([2,3]), 2: set([1, 3]), 3: set([1,2])}
 		self.Cm._times = {frozenset([1, 2]): [2], frozenset([2, 3]): [2],frozenset([1, 3]): [1,3,5]}
 
-		R = self.Cm.getTree(5)
+		R = self.Cm.getTree(7)
 		R_expected = set([
 			
-			CliqueCritique((frozenset([1,3]), (4,4),0,3,4,4)),
-			CliqueCritique((frozenset([1,3]), (1,1),0,3,1,1)),
-			CliqueCritique((frozenset([1,3]), (1,4),3,5,4,1)),
-			CliqueCritique((frozenset([1,2]), (2,2),0,3,2,2)),
-			CliqueCritique((frozenset([2,3]), (2,2),0,3,2,2)),
+			CliqueCritique((frozenset([1,3]), (1,1),0,2,1,1)),
+			CliqueCritique((frozenset([1,3]), (3,3),0,2,3,3)),
+			CliqueCritique((frozenset([1,3]), (5,5),0,2,5,5)),
+			CliqueCritique((frozenset([1,2]), (2,2),0,2,2,2)),
+			CliqueCritique((frozenset([3,2]), (2,2),0,2,2,2)),
 
-			CliqueCritique((frozenset([1,2,3]), (1,2),1,3,1,2)),
-			CliqueCritique((frozenset([1,2,3]), (2,4),2,3,2,4)),
-			CliqueCritique((frozenset([1,2,3]), (1,4),3,5,2,2))
+			CliqueCritique((frozenset([1,3]), (1,5),2,7,5,1)),
+
+
+			CliqueCritique((frozenset([1,2,3]), (1,2),1,2,1,2)),
+			CliqueCritique((frozenset([1,2,3]), (2,3),1,2,2,3)),
+			CliqueCritique((frozenset([1,2,3]), (1,3),2,3,2,2)),
+			CliqueCritique((frozenset([1,2,3]), (1,5),3,7,2,2))
 		])
 		debug_msg = "\nGot :\n" + str(self.Cm)
 		debug_msg += "\nExpected :\n"

@@ -161,25 +161,34 @@ class CliqueMaster:
 					sys.stderr.write("Adding " + str(c_add) + " from "+ str(c) +" (node extension)\n")
 
 
-					if c._deltamax is not None:
-                                                    if c._deltamax>c._deltamin:
-				                        c_wannabe=CliqueCritique((c._X,(c._tlimitb,c._tlimite),c._deltamin,c._deltamax,td,tp))
-					                sys.stderr.write("Trying " + str(c_wannabe) + " but node extension\n")
-						    c._deltamax=None
+					#if c._deltamax is not None:
+                                        #            if c._deltamax>c._deltamin:
+				        #                c_wannabe=CliqueCritique((c._X,(c._tlimitb,c._tlimite),c._deltamin,c._deltamax,td,tp))
+					#                sys.stderr.write("Trying " + str(c_wannabe) + " but node extension\n")
+					#	    c._deltamax=None
 				
-					
-                                       
+                                      	if (td,tp)==(max(first),min(last)):
+						if c._min_deltamin_success is not None:
+							c._min_deltamin_success=min(c_add._deltamin,c._min_deltamin_success)
+						else:
+							c._min_deltamin_success=c_add._deltamin
 
-					if is_max == True :
-						c._deltamax=c_add._deltamin
+
+					#if is_max == True :
+					if c._deltamax is not None:
+						if c._min_deltamin_success is not None:
+							c._deltamax=min(c._min_deltamin_success,c._deltamax)
+					else:
+						c._deltamax=c._min_deltamin_success
 			            	
                                         self.addClique(c_add)
 					
 					is_max = False
 			
 			
-			for c in self._interset:
-				self.addClique(c)
+			for c_add in self._interset:
+				c_add._min_deltamin_success=c._min_deltamin_success
+				self.addClique(c_add)
 
 
 			self._interset=set()

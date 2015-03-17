@@ -13,6 +13,7 @@ class Clique:
                 self._tb = tb
 		self._te = te
                 self._candidates = candidates
+		self._min_deltamin_success=None
 	
 	def __eq__(self, other):
 		if self._X == other._X and self._tb == other._tb and self._te == other._te:
