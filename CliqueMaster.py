@@ -11,6 +11,7 @@ class CliqueMaster:
 	def __init__(self):
 		self._S = deque()
 		self._S_set = set()
+		self._interset=set()
 		self._R = set()
 		self._times = dict()
 		self._nodes = dict()
@@ -68,7 +69,7 @@ class CliqueMaster:
 					    else: c._deltamax=new_t-td
 						
 					    sys.stderr.write("Adding " + str(c_add) + " (time extension)\n")	
-				            self.addClique(c_add)
+				            self.addClique(c_add)  #ATTENTION peut etre necessaire de differencier si pas de changement de deltamin
 					else:
  				            #if different clique we dont want to change deltamax/min
 					    c_add = Clique((c._X, (c._tb, new_t),(c._tlimitb,c._tlimite)),c._candidates)
@@ -76,11 +77,11 @@ class CliqueMaster:
 					    time_extension=new_t-td
 
 					    sys.stderr.write("Adding " + str(c_add) + " (time extension)\n")
-					    self.addClique(c_add)
+					    self._interset.add(c_add)
 				else:
 					c_add = Clique((c._X, (c._tb, td + delta),(c._tlimitb,c._tlimite)),c._candidates)
 					c_add._deltamin=c._deltamin
-					self.addClique(c_add)
+					self._interset.add(c_add)
 					sys.stderr.write("Adding " + str(c_add) + " (time delta extension)\n")
 				is_max = False
 			else:
@@ -126,13 +127,12 @@ class CliqueMaster:
 							c_wannabe=CliqueCritique((c._X,(c._tlimitb,c._tlimite),c._deltamin,tp-new_t,td,tp))
 							sys.stderr.write("Trying " + str(c_wannabe) + " but time extension\n")
 
-
-                                        	self.addClique(c_add)
+						self._interset.add(c_add)
 						sys.stderr.write("Adding " + str(c_add) + " (left time extension)\n")
 				else:
 					c_add = Clique((c._X, (tp - delta, c._te),(c._tlimitb,c._tlimite)),c._candidates)
 					c_add._deltamin=c._deltamin
-					self.addClique(c_add)
+					self._interset.add(c_add)
 					sys.stderr.write("Adding " + str(c_add) + " (left time delta extension)\n")
 				is_max = False
 			else:
@@ -170,15 +170,19 @@ class CliqueMaster:
 					
                                        
 
-					#if is_max == True :
-					#	c._deltamax=c_add._deltamin
+					if is_max == True :
+						c._deltamax=c_add._deltamin
 			            	
                                         self.addClique(c_add)
 					
 					is_max = False
 			
-	
-			self._intersetx=set()
+			
+			for c in self._interset:
+				self.addClique(c)
+
+
+			self._interset=set()
 			if c._deltamax is not None:
 				if c._deltamax>c._deltamin:
 					c_add=CliqueCritique((c._X,(c._tlimitb,c._tlimite),c._deltamin,c._deltamax,td,tp))
@@ -196,67 +200,6 @@ class CliqueMaster:
 
 				
 		return self._R
-
-
-
-	def getDeltaCliques(self, delta): #old function (see delta-cliques)
-		""" Returns a set of maximal cliques. """
-
-		while len(self._S) != 0:
-                        sys.stderr.write("S:"+ str(len(self._S)) + "\n")
-			c = self.getClique()
-			is_max = True
-
-			# Grow time on the right side
-			td = c.getTd(self._times, delta)
-			if c._te != td + delta:
-				new_t = c.getFirstTInInterval(self._times, self._nodes, td, delta)
-				if new_t is not None:
-					c_add = Clique((c._X, (c._tb, new_t)))
-					sys.stderr.write("Adding " + str(c_add) + " (time extension)\n")
-					self.addClique(c_add)
-				else:
-					c_add = Clique((c._X, (c._tb, td + delta)))
-					self.addClique(c_add)
-					sys.stderr.write("Adding " + str(c_add) + " (time delta extension)\n")
-				is_max = False
-			#else:
-				#sys.stderr.write(str(c) + " cannot grow on the right side\n")
-
-			# Grow time on the left side 
-			tp = c.getTp(self._times, delta)
-			if c._tb != tp - delta:
-				new_t = c.getLastTInInterval(self._times, self._nodes, tp, delta)
-				if new_t is not None:
-					c_add = Clique((c._X, (new_t , c._te)))
-					self.addClique(c_add)
-					sys.stderr.write("Adding " + str(c_add) + "(left time extension)\n")
-				else:
-					c_add = Clique((c._X, (tp - delta, c._te)))
-					self.addClique(c_add)
-					sys.stderr.write("Adding " + str(c_add) + " (left time delta extension)\n")
-				is_max = False
-			#else:
-				#sys.stderr.write(str(c) + " cannot grow on the left side\n")
-
-			# Grow node set
-			candidates = c.getAdjacentNodes(self._times, self._nodes, delta)
-			#sys.stderr.write("    Candidates : %s.\n" % (str(candidates)))
-
-			for node in candidates:
-				if c.isClique(self._times, node, delta):
-					Xnew = set(c._X).union([node])
-					c_add = Clique((frozenset(Xnew), (c._tb, c._te)))
-					self.addClique(c_add)
-					sys.stderr.write("Adding " + str(c_add) + " (node extension)\n")
-					is_max = False
-
-			if is_max:
-				#sys.stderr.write(str(c) + " is maximal\n")
-				self._R.add(c)
-		return self._R
-	
-
 
 
 	def printCliques(self):
