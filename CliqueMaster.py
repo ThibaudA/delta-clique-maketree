@@ -11,6 +11,7 @@ class CliqueMaster:
 	def __init__(self):
 		self._S = deque()
 		self._S_set = set()
+                self._S_nodeadd=deque()
 		self._interdeque=deque()
 		self._nodeinterdeque=deque()
 		self._R = set()
@@ -20,9 +21,17 @@ class CliqueMaster:
 	def addClique(self, c):
 		""" Adds a clique to S, checking beforehand that this clique is not already present in S. """
 		if not c in self._S_set:
-			self._S.appendleft(c)
-                        #self._S.append(c)
+			#self._S.appendleft(c)
+                        self._S.append(c)
 			self._S_set.add(c)
+
+	def addCliquenodeadd(self, c):
+		""" Adds a clique to S, checking beforehand that this clique is not already present in S. """
+		if not c in self._S_set:
+			self._S_nodeadd.appendleft(c)
+                        #self._S_nodeadd.append(c)
+			self._S_set.add(c)
+
 
 
 	def halfMemory(self):
@@ -38,19 +47,27 @@ class CliqueMaster:
 		sys.stderr.write("\nGetting clique " + str(c) + "\n")
 		return c
 
+
+	def getCliquefromnode(self):
+		c = self._S_nodeadd.pop()
+		sys.stderr.write("\nGetting clique " + str(c) + "\n")
+		return c
+
 	def getTree(self, delta):
 		""" Returns a set of maximal cliques. """
 		token=0
-		while len(self._S) != 0:
+		while len(self._S) != 0 or len(self._S_nodeadd) != 0:
                         token+=1
 			if token==10000:
-				if len(self._S_set)>700000:  #reduce the memory use
-					self.halfMemory()
-					sys.stderr.write("Cleaning _S_set \n")
+				#if len(self._S_set)>700000:  #reduce the memory use
+					#self.halfMemory()
+					#sys.stderr.write("Cleaning _S_set \n")
 				sys.stderr.write("S:"+ str(len(self._S)) + "\n") #show advancement
 				token=0
-
-			c = self.getClique()
+                        if len(self._S)!=0:
+			    c = self.getClique()
+                        else:
+                            c=self.getCliquefromnode()
 			is_max = True 
 			time_extension=None
 			# Grow time on the right side
@@ -196,7 +213,7 @@ class CliqueMaster:
 			
 
 			for c_add in self._nodeinterdeque:
-				self.addClique(c_add)
+				self.addCliquenodeadd(c_add)
 			self._nodeinterdeque=deque()
 			
 
