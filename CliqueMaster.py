@@ -11,7 +11,8 @@ class CliqueMaster:
 	def __init__(self):
 		self._S = deque()
 		self._S_set = set()
-		self._interset=set()
+		self._interdeque=deque()
+		self._nodeinterdeque=deque()
 		self._R = set()
 		self._times = dict()
 		self._nodes = dict()
@@ -19,8 +20,8 @@ class CliqueMaster:
 	def addClique(self, c):
 		""" Adds a clique to S, checking beforehand that this clique is not already present in S. """
 		if not c in self._S_set:
-			#self._S.appendleft(c)
-                        self._S.append(c)
+			self._S.appendleft(c)
+                        #self._S.append(c)
 			self._S_set.add(c)
 
 
@@ -34,7 +35,7 @@ class CliqueMaster:
 
 	def getClique(self):
 		c = self._S.pop()
-		sys.stderr.write("Getting clique " + str(c) + "\n")
+		sys.stderr.write("\nGetting clique " + str(c) + "\n")
 		return c
 
 	def getTree(self, delta):
@@ -77,11 +78,11 @@ class CliqueMaster:
 					    time_extension=new_t-td
 
 					    sys.stderr.write("Adding " + str(c_add) + " (time extension)\n")
-					    self._interset.add(c_add)
+					    self._interdeque.append(c_add)
 				else:
 					c_add = Clique((c._X, (c._tb, td + delta),(c._tlimitb,c._tlimite)),c._candidates)
 					c_add._deltamin=c._deltamin
-					self._interset.add(c_add)
+					self._interdeque.append(c_add)
 					sys.stderr.write("Adding " + str(c_add) + " (time delta extension)\n")
 				is_max = False
 			else:
@@ -127,12 +128,12 @@ class CliqueMaster:
 							c_wannabe=CliqueCritique((c._X,(c._tlimitb,c._tlimite),c._deltamin,tp-new_t,td,tp))
 							sys.stderr.write("Trying " + str(c_wannabe) + " but time extension\n")
 
-						self._interset.add(c_add)
+						self._interdeque.append(c_add)
 						sys.stderr.write("Adding " + str(c_add) + " (left time extension)\n")
 				else:
 					c_add = Clique((c._X, (tp - delta, c._te),(c._tlimitb,c._tlimite)),c._candidates)
 					c_add._deltamin=c._deltamin
-					self._interset.add(c_add)
+					self._interdeque.append(c_add)
 					sys.stderr.write("Adding " + str(c_add) + " (left time delta extension)\n")
 				is_max = False
 			else:
@@ -166,8 +167,8 @@ class CliqueMaster:
 				        #                c_wannabe=CliqueCritique((c._X,(c._tlimitb,c._tlimite),c._deltamin,c._deltamax,td,tp))
 					#                sys.stderr.write("Trying " + str(c_wannabe) + " but node extension\n")
 					#	    c._deltamax=None
-				
-                                      	if (td,tp)==(max(first),min(last)):
+					
+                                      	if (tp,td)==(max(first),min(last)): #Attention a l'ordre 
 						if c._min_deltamin_success is not None:
 							c._min_deltamin_success=min(c_add._deltamin,c._min_deltamin_success)
 						else:
@@ -181,17 +182,24 @@ class CliqueMaster:
 					else:
 						c._deltamax=c._min_deltamin_success
 			            	
-                                        self.addClique(c_add)
+
+					self._nodeinterdeque.append(c_add)
 					
 					is_max = False
 			
-			
-			for c_add in self._interset:
+			#Possibilité de manipulation du parcours de l'arbre
+
+			for c_add in self._interdeque:
 				c_add._min_deltamin_success=c._min_deltamin_success
 				self.addClique(c_add)
+			self._interdeque=deque()
+			
 
+			for c_add in self._nodeinterdeque:
+				self.addClique(c_add)
+			self._nodeinterdeque=deque()
+			
 
-			self._interset=set()
 			if c._deltamax is not None:
 				if c._deltamax>c._deltamin:
 					c_add=CliqueCritique((c._X,(c._tlimitb,c._tlimite),c._deltamin,c._deltamax,td,tp))
