@@ -344,18 +344,14 @@ class TestClique(unittest.TestCase):
 		R_expected = set([
 		
 
-
-			CliqueCritique((frozenset([1,2]), (1,1),0,1,1,1)),
-			CliqueCritique((frozenset([1,2]), (2,2),0,1,2,2)),
 			CliqueCritique((frozenset([1,4]), (3,3),0,10,3,3)),
+			CliqueCritique((frozenset([2,3,4]), (5,5),0,10 ,5,5)),
 			CliqueCritique((frozenset([1,3]), (2,2),0,10,2,2)),
-
+			CliqueCritique((frozenset([1,2]), (2,2),0,1,2,2)),
+			CliqueCritique((frozenset([1,2]), (1,1),0,1,2,2)),
 			CliqueCritique((frozenset([1,2]), (1,2),1,10,1,2)),
-
-			CliqueCritique((frozenset([1,2,3]), (2,5),3,4,5,2)),
-			CliqueCritique((frozenset([1,3,4]), (2,5),3,4,5,2)),
-			CliqueCritique((frozenset([1,2,3]), (1,3),2,3,2,2)),
-			CliqueCritique((frozenset([1,2,3]), (1,5),3,7,2,2))
+			CliqueCritique((frozenset([1,2,3,4]), (2,5),3,4,2,5)),
+			CliqueCritique((frozenset([1,2,3,4]), (1,5),3,4,1,5))
 		])
 		debug_msg = "\nGot :\n" + str(self.Cm)
 		debug_msg += "\nExpected :\n"

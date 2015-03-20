@@ -6,6 +6,7 @@ class Clique:
 	def __init__(self, c,candidates=set([])):
 		(X,(tb,te),(tlimitb,tlimite)) = c
                 self._deltamin=0
+		self._min_deltamin_success=None
 		self._deltamax=None
 		self._X = X
                 self._tlimitb=tlimitb
@@ -13,7 +14,6 @@ class Clique:
                 self._tb = tb
 		self._te = te
                 self._candidates = candidates
-		self._min_deltamin_success=None
 	
 	def __eq__(self, other):
 		if self._X == other._X and self._tb == other._tb and self._te == other._te:

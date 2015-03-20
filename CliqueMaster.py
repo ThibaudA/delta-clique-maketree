@@ -25,6 +25,7 @@ class CliqueMaster:
                         self._S.append(c)
 			self._S_set.add(c)
 
+
 	def addCliquenodeadd(self, c):
 		""" Adds a clique to S, checking beforehand that this clique is not already present in S. """
 		if not c in self._S_set:
@@ -184,13 +185,13 @@ class CliqueMaster:
 				        #                c_wannabe=CliqueCritique((c._X,(c._tlimitb,c._tlimite),c._deltamin,c._deltamax,td,tp))
 					#                sys.stderr.write("Trying " + str(c_wannabe) + " but node extension\n")
 					#	    c._deltamax=None
-					
                                       	if (tp,td)==(max(first),min(last)): #Attention a l'ordre 
 						if c._min_deltamin_success is not None:
 							c._min_deltamin_success=min(c_add._deltamin,c._min_deltamin_success)
 						else:
 							c._min_deltamin_success=c_add._deltamin
 
+                                                print c._min_deltamin_success
 
 					#if is_max == True :
 					if c._deltamax is not None:
@@ -208,7 +209,7 @@ class CliqueMaster:
 
 			for c_add in self._interdeque:
 				c_add._min_deltamin_success=c._min_deltamin_success
-				self.addClique(c_add)
+                                self.addClique(c_add)
 			self._interdeque=deque()
 			
 
