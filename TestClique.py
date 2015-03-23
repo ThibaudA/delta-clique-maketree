@@ -16,7 +16,7 @@ class TestClique(unittest.TestCase):
 		sys.stderr = open(os.devnull, 'w')
 
 	def test_delta_is_0(self):
-		self.Cm._S = deque([
+		self.Cm._S = list([
 			Clique((frozenset([1,2]), (1,1),(1,1)),set([]))
 		])	
 		self.Cm._times = {frozenset([1,2]):[1]}
@@ -28,7 +28,7 @@ class TestClique(unittest.TestCase):
 		pass
 
 	def test_big_delta(self):
-		self.Cm._S = deque([
+		self.Cm._S = list([
 			Clique((frozenset([1,2]), (1,1),(1,1)),set([]))
 		])	
 		self.Cm._times = {frozenset([1,2]):[1]}
@@ -37,7 +37,7 @@ class TestClique(unittest.TestCase):
 		self.assertEqual(R, set([CliqueCritique((frozenset([1,2]), (1,1),0,100,1,1))]))
 
 	def test_simple_triangle_when_delta_is_5(self):
-		self.Cm._S = deque([
+		self.Cm._S = list([
 		    Clique((frozenset([1, 2]), (1, 1),(1,1)),set([])),
 		    Clique((frozenset([1, 3]), (2, 2),(2,2)),set([])),
 		    Clique((frozenset([2, 3]), (3, 3),(3,3)),set([]))
@@ -65,7 +65,7 @@ class TestClique(unittest.TestCase):
 		pass
 	
 	def test_single_link_occurring_every_delta(self):
-		self.Cm._S = deque([
+		self.Cm._S = list([
 		    Clique((frozenset([1, 2]), (1, 1),(1,1)),set([])),
 		    Clique((frozenset([1, 2]), (3, 3),(3,3)),set([]))
 		])
@@ -86,7 +86,7 @@ class TestClique(unittest.TestCase):
 		self.assertEqual(R, R_expected, debug_msg)
 
 	def test_single_link_not_occurring_every_delta(self):
-		self.Cm._S = deque([
+		self.Cm._S = list([
 		    Clique((frozenset([1, 2]), (1, 1),(1,1)),set([])),
 		    Clique((frozenset([1, 2]), (3, 3),(3,3)),set([]))
 		])
@@ -107,7 +107,7 @@ class TestClique(unittest.TestCase):
 		self.assertEqual(R, R_expected, debug_msg)
 		
 	def test_triangle_and_many_occurrences_with_delta_too_small(self):
-		self.Cm._S = deque([
+		self.Cm._S = list([
 		    Clique((frozenset([1, 2]), (1, 1),(1,1)),set([])),
 		    Clique((frozenset([2, 3]), (2, 2),(2,2)),set([])),
 		    Clique((frozenset([1, 3]), (3, 3),(3,3)),set([])),
@@ -133,7 +133,7 @@ class TestClique(unittest.TestCase):
 		self.assertEqual(R, R_expected, debug_msg)		
 
 	def test_triangle_and_many_occurrences_with_delta_big(self):
-		self.Cm._S = deque([
+		self.Cm._S = list([
 		    Clique((frozenset([1, 2]), (1, 1),(1,1)),set([])),
 		    Clique((frozenset([2, 3]), (2, 2),(2,2)),set([])),
 		    Clique((frozenset([1, 3]), (3, 3),(3,3)),set([])),
@@ -162,7 +162,7 @@ class TestClique(unittest.TestCase):
 		self.assertEqual(R, R_expected, debug_msg)
 
 	def test_triangle_and_many_occurrences_with_delta_huge(self):
-		self.Cm._S = deque([
+		self.Cm._S = list([
 		    Clique((frozenset([1, 2]), (1, 1),(1,1)),set([])),
 		    Clique((frozenset([2, 3]), (2, 2),(2,2)),set([])),
 		    Clique((frozenset([1, 3]), (3, 3),(3,3)),set([])),
@@ -193,7 +193,7 @@ class TestClique(unittest.TestCase):
 
 
 	def test_simultaneouslinks(self):
-		self.Cm._S = deque([
+		self.Cm._S = list([
 		    Clique((frozenset([1, 2]), (1, 1),(1,1))),
 		    Clique((frozenset([2, 3]), (1, 1),(1,1))),
 		    Clique((frozenset([1, 3]), (1, 1),(1,1))),
@@ -212,7 +212,7 @@ class TestClique(unittest.TestCase):
 		self.assertEqual(R, R_expected, debug_msg)
 
 	def test_simultaneouslinkswithadoublelink(self):
-		self.Cm._S = deque([
+		self.Cm._S = list([
 		    Clique((frozenset([1, 2]), (1, 1),(1,1))),
 		    Clique((frozenset([2, 3]), (1, 1),(1,1))),
 		    Clique((frozenset([1, 3]), (1, 1),(1,1))),
@@ -235,7 +235,7 @@ class TestClique(unittest.TestCase):
 		self.assertEqual(R, R_expected, debug_msg)
 
 	def test_extensionvsdeltamax(self):
-		self.Cm._S = deque([
+		self.Cm._S = list([
 		    Clique((frozenset([1, 2]), (1, 1),(1,1))),
 		    Clique((frozenset([2, 3]), (2, 2),(2,2))),
 		    Clique((frozenset([1, 2]), (3, 3),(3,3))),
@@ -263,7 +263,7 @@ class TestClique(unittest.TestCase):
 
 
 	def test_ajoutdenoeudwhenmax(self):
-		self.Cm._S = deque([
+		self.Cm._S = list([
 		    Clique((frozenset([1, 3]), (1, 1),(1,1))),
 		    Clique((frozenset([1, 2]), (2, 2),(2,2))),
 		    Clique((frozenset([2, 3]), (2, 2),(2,2))),
@@ -293,7 +293,7 @@ class TestClique(unittest.TestCase):
 		self.assertEqual(R, R_expected, debug_msg)
 
 	def test_ajoutdenoeudwhenmaxsuivitdajoutdelien(self):
-		self.Cm._S = deque([
+		self.Cm._S = list([
 		    Clique((frozenset([1, 3]), (1, 1),(1,1))),
 		    Clique((frozenset([1, 2]), (2, 2),(2,2))),
 		    Clique((frozenset([2, 3]), (2, 2),(2,2))),
@@ -328,7 +328,7 @@ class TestClique(unittest.TestCase):
 
 
 	def test_complexexemple_passageorder(self):
-		self.Cm._S = deque([
+                sousflot   = list([
 		    Clique((frozenset([1, 2]), (1, 1),(1,1))),
 		    Clique((frozenset([1, 2]), (2, 2),(2,2))),
 		    Clique((frozenset([1, 3]), (2, 2),(2,2))),
@@ -337,21 +337,24 @@ class TestClique(unittest.TestCase):
 		    Clique((frozenset([4, 3]), (5, 5),(5,5))),
 		    Clique((frozenset([2, 4]), (5, 5),(5,5))),
 		])
+                for c in sousflot:
+                    self.Cm.addClique(c)
+
 		self.Cm._nodes = {1: set([2,3,4]), 2: set([1,3,4]), 3: set([1,2,4]),4: set([1,2,3])}
 		self.Cm._times = {frozenset([1, 2]): [1,2], frozenset([1, 3]): [2],frozenset([1, 4]): [3],frozenset([2, 3]): [5],frozenset([2, 4]): [5],frozenset([3, 4]): [5]}
 
 		R = self.Cm.getTree(10)
 		R_expected = set([
 		
-
-			CliqueCritique((frozenset([1,4]), (3,3),0,10,3,3)),
+			CliqueCritique((frozenset([1,2]), (1,1),0,1,1,1)),
 			CliqueCritique((frozenset([2,3,4]), (5,5),0,10 ,5,5)),
 			CliqueCritique((frozenset([1,3]), (2,2),0,10,2,2)),
 			CliqueCritique((frozenset([1,2]), (2,2),0,1,2,2)),
-			CliqueCritique((frozenset([1,2]), (1,1),0,1,2,2)),
-			CliqueCritique((frozenset([1,2]), (1,2),1,10,1,2)),
+			CliqueCritique((frozenset([1,4]), (3,3),0,10,3,3)),
+			CliqueCritique((frozenset([1,2]), (1,2),1,10,2,1)),
+			CliqueCritique((frozenset([1,2,3]), (2,5),3,3,2,5)),
 			CliqueCritique((frozenset([1,2,3,4]), (2,5),3,4,2,5)),
-			CliqueCritique((frozenset([1,2,3,4]), (1,5),3,4,1,5))
+			CliqueCritique((frozenset([1,2,3,4]), (1,5),4,10,2,5))
 		])
 		debug_msg = "\nGot :\n" + str(self.Cm)
 		debug_msg += "\nExpected :\n"

@@ -9,9 +9,9 @@ from CliqueCritique import CliqueCritique
 class CliqueMaster:
 	
 	def __init__(self):
-		self._S = deque()
+		self._S = list()
 		self._S_set = set()
-                self._S_nodeadd=deque()
+                self._S_nodeadd=list()
 		self._interdeque=deque()
 		self._nodeinterdeque=deque()
 		self._R = set()
@@ -21,15 +21,28 @@ class CliqueMaster:
 	def addClique(self, c):
 		""" Adds a clique to S, checking beforehand that this clique is not already present in S. """
 		if not c in self._S_set:
-			#self._S.appendleft(c)
-                        self._S.append(c)
+			self._S.insert(0,c)
+                        #self._S.append(c)
 			self._S_set.add(c)
+                elif  c._min_deltamin_success is not None:
+                    if c in self._S:
+                        index=self._S.index(c)
+                        if self._S[index]._min_deltamin_success is not None:    
+                            self._S[index]._min_deltamin_success=min(c._min_deltamin_success,self._S[index]._min_deltamin_success)
+                        else:
+                            self._S[index]._min_deltamin_success=c._min_deltamin_success
+                    elif c in self._S_nodeadd:
+                        index=self._S_nodeadd.index(c)
+                        if self._S_nodeadd[index]._min_deltamin_success is not None:    
+                            self._S_nodeadd[index]._min_deltamin_success=min(c._min_deltamin_success,self._S_nodeadd[index]._min_deltamin_success)
+                        else:
+                            self._S_nodeadd[index]._min_deltamin_success=c._min_deltamin_success
 
 
 	def addCliquenodeadd(self, c):
 		""" Adds a clique to S, checking beforehand that this clique is not already present in S. """
 		if not c in self._S_set:
-			self._S_nodeadd.appendleft(c)
+			self._S_nodeadd.insert(0,c)
                         #self._S_nodeadd.append(c)
 			self._S_set.add(c)
 
@@ -191,7 +204,6 @@ class CliqueMaster:
 						else:
 							c._min_deltamin_success=c_add._deltamin
 
-                                                print c._min_deltamin_success
 
 					#if is_max == True :
 					if c._deltamax is not None:

@@ -38,6 +38,7 @@ for line in sys.stdin:
 Cm._times = times
 Cm._nodes = nodes
 sys.stderr.write("Processed " + str(nb_lines) + " from stdin\n")
+
 R = Cm.getTree(delta)
 Cm.printCliques()	
 
