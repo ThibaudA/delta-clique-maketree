@@ -24,19 +24,19 @@ class CliqueMaster:
 			self._S.insert(0,c)
                         #self._S.append(c)
 			self._S_set.add(c)
-                elif  c._min_deltamin_success is not None:
-                    if c in self._S:
-                        index=self._S.index(c)
-                        if self._S[index]._min_deltamin_success is not None:    
-                            self._S[index]._min_deltamin_success=min(c._min_deltamin_success,self._S[index]._min_deltamin_success)
-                        else:
-                            self._S[index]._min_deltamin_success=c._min_deltamin_success
-                    elif c in self._S_nodeadd:
-                        index=self._S_nodeadd.index(c)
-                        if self._S_nodeadd[index]._min_deltamin_success is not None:    
-                            self._S_nodeadd[index]._min_deltamin_success=min(c._min_deltamin_success,self._S_nodeadd[index]._min_deltamin_success)
-                        else:
-                            self._S_nodeadd[index]._min_deltamin_success=c._min_deltamin_success
+#                elif  c._min_deltamin_success is not None:
+ #                   if c in self._S:
+  #                      index=self._S.index(c)
+   #                     if self._S[index]._min_deltamin_success is not None:    
+    #                        self._S[index]._min_deltamin_success=min(c._min_deltamin_success,self._S[index]._min_deltamin_success)
+     #                   else:
+     #                       self._S[index]._min_deltamin_success=c._min_deltamin_success
+     #               elif c in self._S_nodeadd:
+     #                   index=self._S_nodeadd.index(c)
+     #                   if self._S_nodeadd[index]._min_deltamin_success is not None:    
+     #                       self._S_nodeadd[index]._min_deltamin_success=min(c._min_deltamin_success,self._S_nodeadd[index]._min_deltamin_success)
+     #                   else:
+     #                       self._S_nodeadd[index]._min_deltamin_success=c._min_deltamin_success
 
 
 	def addCliquenodeadd(self, c):
@@ -58,13 +58,13 @@ class CliqueMaster:
 
 	def getClique(self):
 		c = self._S.pop()
-		sys.stderr.write("\nGetting clique " + str(c) + "\n")
+		sys.stderr.write("Getting clique " + str(c) + "\n")
 		return c
 
 
 	def getCliquefromnode(self):
 		c = self._S_nodeadd.pop()
-		sys.stderr.write("\nGetting clique " + str(c) + "\n")
+		sys.stderr.write("Getting clique " + str(c) + "\n")
 		return c
 
 	def getTree(self, delta):
@@ -72,11 +72,12 @@ class CliqueMaster:
 		token=0
 		while len(self._S) != 0 or len(self._S_nodeadd) != 0:
                         token+=1
-			if token==10000:
+			if token==1:
 				#if len(self._S_set)>700000:  #reduce the memory use
 					#self.halfMemory()
 					#sys.stderr.write("Cleaning _S_set \n")
-				sys.stderr.write("S:"+ str(len(self._S)) + "\n") #show advancement
+				sys.stderr.write("\nS:"+ str(len(self._S)) + "\n") #show advancement
+				sys.stderr.write("S:node "+ str(len(self._S_nodeadd)) + "\n") #show advancement
 				token=0
                         if len(self._S)!=0:
 			    c = self.getClique()
