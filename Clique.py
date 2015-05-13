@@ -60,7 +60,7 @@ class Clique:
 				if len(time)==0:
 					return False,None,None,None
 				time = [self._tb] + time + [self._te]
-				ict = [j - i for i,j in zip(time[:-1], time[1:])]
+				ict = [j - i for i,j in zip(time[:-1], time[1:])] 
 			if max(ict) > delta:
 				return False,None,None,None
 
@@ -70,7 +70,8 @@ class Clique:
 				interval=[0]
 			else:
 				interval=[j-i for i,j in zip(time[1:-2],time[2:-1])]
-			if max(interval)>maxinterval or maxinterval==None: maxinterval=max(interval) #max interval for this two nodes
+			if max(interval)>maxinterval or maxinterval==None: 
+				maxinterval=max(interval) #max interval for this two nodes
 
 		return True,first,last,maxinterval
 
@@ -90,10 +91,7 @@ class Clique:
 
 		# Get the intercontact times in [te;td+delta]
 		for candidate in candidates:
-			#sys.stderr.write("c is " + str(candidate) + "\n")              
-			#sys.stderr.write("tt is " + str(times[candidate]) + "\n")              
 			index = bisect.bisect_right(times[candidate], self._te)
-			#sys.stderr.write(str(index) + "/" + str(len(times[candidate]))+ "\n")
 
 			if len(times[candidate]) == 1 and index == 1 and times[candidate][index-1] <= td + delta:
 				if times[candidate][index - 1] > self._te:
@@ -118,7 +116,6 @@ class Clique:
                                         elif t==times[candidate][index]:
                                             if candidate.issubset(self._X):
                                                 sameclique=True
-		#sys.stderr.write("    new_t = %s\n" % (str(t)))
 		return t,sameclique
 
 
@@ -190,40 +187,7 @@ class Clique:
 		#sys.stderr.write("    tp = %d\n" % (tp))
 		return tp
 	
-	def getDeltamaxRight(self,times,td,delta):
-		#deltamax determination
-		tfirstlink=None
-		deltamax=delta
-		min_t=[]
-		for u in self._X:
-			for v in self._X:
-				link= frozenset([u,v])
-				if link in times:
-					a=[x for x in times[link] if x>self._tlimite] #need a new condition to me more efficient like x<td+delta
-					if len(a)>0:
-						min_t.append(min(a))
-		if len(min_t)>0:
-			tfirstlink=min(min_t)
-		if tfirstlink is not None:
-			if tfirstlink-td<delta: deltamax=tfirstlink-td
-		return deltamax
-	
-	def getDeltamaxLeft(self,times,tp,delta):
-		tlastlink=None
-		deltamax=delta
-		max_t=[]
-		for u in self._X:
-			for v in self._X:
-				link= frozenset([u,v])
-				if link in times:
-					a=[x for x in times[link] if x<self._tlimitb]
-					if len(a)>0:
-						max_t.append(max(a))
-		if len(max_t)>0:
-			tlastlink=max(max_t)
-		if tlastlink is not None:
-			if tp-tlastlink<delta: deltamax=tp-tlastlink
-		return deltamax
+
 
 
 
