@@ -214,7 +214,7 @@ class CliqueMaster:
 						else:
 							c._min_deltamin_success=c_add._deltamin
 
-					#étrange
+					#étrange je pense que time_extention est important la aussi
 					if c._deltamax is not None:
 						if c._min_deltamin_success is not None:
 							c._deltamax=min(c._min_deltamin_success,c._deltamax)
