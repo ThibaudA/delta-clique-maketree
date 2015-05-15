@@ -16,9 +16,11 @@ class TestClique(unittest.TestCase):
 		sys.stderr = open(os.devnull, 'w')
 
 	def test_delta_is_0(self):
-		self.Cm._S = list([
+                sousflot   = list([
 			Clique((frozenset([1,2]), (1,1),(1,1)),set([]))
 		])	
+                for c in sousflot:
+                    self.Cm.addClique(c)
 		self.Cm._times = {frozenset([1,2]):[1]}
 		self.Cm._nodes = {1:set([2]), 2:set([1])}
 		R = self.Cm.getTree(10)
@@ -28,20 +30,24 @@ class TestClique(unittest.TestCase):
 		pass
 
 	def test_big_delta(self):
-		self.Cm._S = list([
+                sousflot   = list([
 			Clique((frozenset([1,2]), (1,1),(1,1)),set([]))
 		])	
+                for c in sousflot:
+                    self.Cm.addClique(c)
 		self.Cm._times = {frozenset([1,2]):[1]}
 		self.Cm._nodes = {1:set([2]), 2:set([1])}
 		R = self.Cm.getTree(100)
 		self.assertEqual(R, set([CliqueCritique((frozenset([1,2]), (1,1),0,100,1,1))]))
 
 	def test_simple_triangle_when_delta_is_5(self):
-		self.Cm._S = list([
+                sousflot   = list([
 		    Clique((frozenset([1, 2]), (1, 1),(1,1)),set([])),
 		    Clique((frozenset([1, 3]), (2, 2),(2,2)),set([])),
 		    Clique((frozenset([2, 3]), (3, 3),(3,3)),set([]))
 		])
+                for c in sousflot:
+                    self.Cm.addClique(c)
 		self.Cm._nodes = {1: set([2, 3]), 2: set([1, 3]), 3: set([1, 2])}
 		self.Cm._times = {frozenset([1, 3]): [2], frozenset([1, 2]): [1], frozenset([2, 3]): [3]}
 
@@ -65,10 +71,12 @@ class TestClique(unittest.TestCase):
 		pass
 	
 	def test_single_link_occurring_every_delta(self):
-		self.Cm._S = list([
+                sousflot   = list([
 		    Clique((frozenset([1, 2]), (1, 1),(1,1)),set([])),
 		    Clique((frozenset([1, 2]), (3, 3),(3,3)),set([]))
 		])
+                for c in sousflot:
+                    self.Cm.addClique(c)
 		self.Cm._nodes = {1: set([2]), 2: set([1])}
 		self.Cm._times = {frozenset([1, 2]): [1, 3]}
 		
@@ -86,10 +94,12 @@ class TestClique(unittest.TestCase):
 		self.assertEqual(R, R_expected, debug_msg)
 
 	def test_single_link_not_occurring_every_delta(self):
-		self.Cm._S = list([
+                sousflot   = list([
 		    Clique((frozenset([1, 2]), (1, 1),(1,1)),set([])),
 		    Clique((frozenset([1, 2]), (3, 3),(3,3)),set([]))
 		])
+                for c in sousflot:
+                    self.Cm.addClique(c)
 		self.Cm._nodes = {1: set([2]), 2: set([1])}
 		self.Cm._times = {frozenset([1, 2]): [1, 3]}
 		
@@ -107,12 +117,14 @@ class TestClique(unittest.TestCase):
 		self.assertEqual(R, R_expected, debug_msg)
 		
 	def test_triangle_and_many_occurrences_with_delta_too_small(self):
-		self.Cm._S = list([
+                sousflot   = list([
 		    Clique((frozenset([1, 2]), (1, 1),(1,1)),set([])),
 		    Clique((frozenset([2, 3]), (2, 2),(2,2)),set([])),
 		    Clique((frozenset([1, 3]), (3, 3),(3,3)),set([])),
 		    Clique((frozenset([1, 2]), (4, 4),(4,4)),set([]))
 		])
+                for c in sousflot:
+                    self.Cm.addClique(c)
 		self.Cm._nodes = {1: set([2, 3]), 2: set([1, 3]), 3: set([1, 2])}
 		self.Cm._times = {frozenset([1, 3]): [3], frozenset([1, 2]): [1, 4], frozenset([2, 3]): [2]}
 
@@ -133,12 +145,14 @@ class TestClique(unittest.TestCase):
 		self.assertEqual(R, R_expected, debug_msg)		
 
 	def test_triangle_and_many_occurrences_with_delta_big(self):
-		self.Cm._S = list([
+                sousflot   = list([
 		    Clique((frozenset([1, 2]), (1, 1),(1,1)),set([])),
 		    Clique((frozenset([2, 3]), (2, 2),(2,2)),set([])),
 		    Clique((frozenset([1, 3]), (3, 3),(3,3)),set([])),
 		    Clique((frozenset([1, 2]), (4, 4),(4,4)),set([]))
 		])
+                for c in sousflot:
+                    self.Cm.addClique(c)
 		self.Cm._nodes = {1: set([2, 3]), 2: set([1, 3]), 3: set([1, 2])}
 		self.Cm._times = {frozenset([1, 3]): [3], frozenset([1, 2]): [1, 4], frozenset([2, 3]): [2]}
 
@@ -162,12 +176,14 @@ class TestClique(unittest.TestCase):
 		self.assertEqual(R, R_expected, debug_msg)
 
 	def test_triangle_and_many_occurrences_with_delta_huge(self):
-		self.Cm._S = list([
+                sousflot   = list([
 		    Clique((frozenset([1, 2]), (1, 1),(1,1)),set([])),
 		    Clique((frozenset([2, 3]), (2, 2),(2,2)),set([])),
 		    Clique((frozenset([1, 3]), (3, 3),(3,3)),set([])),
 		    Clique((frozenset([1, 2]), (4, 4),(4,4)),set([]))
 		])
+                for c in sousflot:
+                    self.Cm.addClique(c)
 		self.Cm._nodes = {1: set([2, 3]), 2: set([1, 3]), 3: set([1, 2])}
 		self.Cm._times = {frozenset([1, 3]): [3], frozenset([1, 2]): [1, 4], frozenset([2, 3]): [2]}
 
@@ -193,11 +209,13 @@ class TestClique(unittest.TestCase):
 
 
 	def test_simultaneouslinks(self):
-		self.Cm._S = list([
+                sousflot   = list([
 		    Clique((frozenset([1, 2]), (1, 1),(1,1))),
 		    Clique((frozenset([2, 3]), (1, 1),(1,1))),
 		    Clique((frozenset([1, 3]), (1, 1),(1,1))),
 		])
+                for c in sousflot:
+                    self.Cm.addClique(c)
 		self.Cm._nodes = {1: set([2, 3]), 2: set([1, 3]), 3: set([1, 2])}
 		self.Cm._times = {frozenset([1, 3]): [1], frozenset([1, 2]): [1], frozenset([2, 3]): [1]}
 
@@ -212,12 +230,14 @@ class TestClique(unittest.TestCase):
 		self.assertEqual(R, R_expected, debug_msg)
 
 	def test_simultaneouslinkswithadoublelink(self):
-		self.Cm._S = list([
+                sousflot   = list([
 		    Clique((frozenset([1, 2]), (1, 1),(1,1))),
 		    Clique((frozenset([2, 3]), (1, 1),(1,1))),
 		    Clique((frozenset([1, 3]), (1, 1),(1,1))),
 		    Clique((frozenset([2, 3]), (2, 2),(2,2)))
 		])
+                for c in sousflot:
+                    self.Cm.addClique(c)
 		self.Cm._nodes = {1: set([2, 3]), 2: set([1, 3]), 3: set([1, 2])}
 		self.Cm._times = {frozenset([1, 3]): [1], frozenset([1, 2]): [1], frozenset([2, 3]): [1,2]}
 
@@ -235,13 +255,15 @@ class TestClique(unittest.TestCase):
 		self.assertEqual(R, R_expected, debug_msg)
 
 	def test_extensionvsdeltamax(self):
-		self.Cm._S = list([
+                sousflot   = list([
 		    Clique((frozenset([1, 2]), (1, 1),(1,1))),
 		    Clique((frozenset([2, 3]), (2, 2),(2,2))),
 		    Clique((frozenset([1, 2]), (3, 3),(3,3))),
 		    Clique((frozenset([1, 2]), (6, 6),(6,6))),
 
 		])
+                for c in sousflot:
+                    self.Cm.addClique(c)
 		self.Cm._nodes = {1: set([2]), 2: set([1, 3]), 3: set([2])}
 		self.Cm._times = {frozenset([1, 2]): [1,3,6], frozenset([2, 3]): [2]}
 
@@ -263,13 +285,15 @@ class TestClique(unittest.TestCase):
 
 
 	def test_ajoutdenoeudwhenmax(self):
-		self.Cm._S = list([
+                sousflot   = list([
 		    Clique((frozenset([1, 3]), (1, 1),(1,1))),
 		    Clique((frozenset([1, 2]), (2, 2),(2,2))),
 		    Clique((frozenset([2, 3]), (2, 2),(2,2))),
 		    Clique((frozenset([1, 3]), (4, 4),(4,4))),
 
 		])
+                for c in sousflot:
+                    self.Cm.addClique(c)
 		self.Cm._nodes = {1: set([2,3]), 2: set([1, 3]), 3: set([1,2])}
 		self.Cm._times = {frozenset([1, 2]): [2], frozenset([2, 3]): [2],frozenset([1, 3]): [1,4]}
 
@@ -293,13 +317,15 @@ class TestClique(unittest.TestCase):
 		self.assertEqual(R, R_expected, debug_msg)
 
 	def test_ajoutdenoeudwhenmaxsuivitdajoutdelien(self):
-		self.Cm._S = list([
+                sousflot   = list([
 		    Clique((frozenset([1, 3]), (1, 1),(1,1))),
 		    Clique((frozenset([1, 2]), (2, 2),(2,2))),
 		    Clique((frozenset([2, 3]), (2, 2),(2,2))),
 		    Clique((frozenset([1, 3]), (3, 3),(3,3))),
 		    Clique((frozenset([1, 3]), (5, 5),(5,5))),
 		])
+                for c in sousflot:
+                    self.Cm.addClique(c)
 		self.Cm._nodes = {1: set([2,3]), 2: set([1, 3]), 3: set([1,2])}
 		self.Cm._times = {frozenset([1, 2]): [2], frozenset([2, 3]): [2],frozenset([1, 3]): [1,3,5]}
 
@@ -347,9 +373,9 @@ class TestClique(unittest.TestCase):
 		R_expected = set([
 		
 			CliqueCritique((frozenset([1,2]), (1,1),0,1,1,1)),
+			CliqueCritique((frozenset([1,2]), (2,2),0,1,2,2)),
 			CliqueCritique((frozenset([2,3,4]), (5,5),0,10 ,5,5)),
 			CliqueCritique((frozenset([1,3]), (2,2),0,10,2,2)),
-			CliqueCritique((frozenset([1,2]), (2,2),0,1,2,2)),
 			CliqueCritique((frozenset([1,4]), (3,3),0,10,3,3)),
 			CliqueCritique((frozenset([1,2]), (1,2),1,10,2,1)),
 			CliqueCritique((frozenset([1,2,3]), (2,5),3,3,2,5)),

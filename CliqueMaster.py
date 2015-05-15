@@ -11,9 +11,9 @@ class CliqueMaster:
 	def __init__(self):
 		# 2 contenants pour socker les cliques: après ajout de temps (_S) ou aprés ajout de noeud (_S_nodeadd)
 		#interdeque et nodeinterdeque: permet de gerer les informations provenant de la tentative d'ajout de noeud
-		self._S = list()
+		self._S = deque()
 		self._S_set = set()
-                self._S_nodeadd=list()
+                self._S_nodeadd=deque()
 		self._interdeque=deque()
 		self._nodeinterdeque=deque()
 		self._R = set()
@@ -26,8 +26,8 @@ class CliqueMaster:
 #Commentaire: Potentielle solution (check de toute la liste à chaque ajout). Couteux.
 
 		if not c in self._S_set:
-			self._S.insert(0,c)
-                        #self._S.append(c)
+			#self._S.insert(0,c)
+                        self._S.append(c)
 			self._S_set.add(c)
 #                elif  c._min_deltamin_success is not None:
 #                    if c in self._S:
@@ -47,8 +47,8 @@ class CliqueMaster:
 	def addCliquenodeadd(self, c):
 		""" Adds a clique to S, checking beforehand that this clique is not already present in S. """
 		if not c in self._S_set:
-			self._S_nodeadd.insert(0,c)
-                        #self._S_nodeadd.append(c)
+			#self._S_nodeadd.insert(0,c)
+                        self._S_nodeadd.append(c)
 			self._S_set.add(c)
 
 
@@ -88,7 +88,7 @@ class CliqueMaster:
                         if len(self._S)!=0:
 			    c = self.getClique()
                         else:
-                            c=self.getCliquefromnode()
+                            c = self.getCliquefromnode()
 
 			is_max = True 
 			time_extension=None
@@ -236,7 +236,8 @@ class CliqueMaster:
 			
 
 			for c_add in self._nodeinterdeque:
-				self.addCliquenodeadd(c_add)
+				#self.addCliquenodeadd(c_add)
+				self.addClique(c_add)
 			self._nodeinterdeque=deque()
 			
 
