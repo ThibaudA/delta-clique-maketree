@@ -14,7 +14,7 @@ class CliqueCritique:
                 self._tlimite=tlimite
 	
 	def __eq__(self, other):
-		if self._X == other._X and self._tlimitb == other._tlimitb and self._tlimite == other._tlimite and self._deltamin == other._deltamin  :
+		if self._X == other._X and self._tlimitb == other._tlimitb and self._tlimite == other._tlimite and self._deltamin == other._deltamin  and self._deltamax == other._deltamax:
 			return True
 		else:
 			return False

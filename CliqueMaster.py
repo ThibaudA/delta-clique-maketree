@@ -208,23 +208,24 @@ class CliqueMaster:
 
 					#L'ajout de noeud n'as d'inflence sur le calcul de deltamax que lorsque les tp et td
 					#des deux cliques sont identiques
-                                      	if (tp,td)==(max(first),min(last)): #Attention a l'ordre 
+                                        
+                                        if (tp,td)==(max(max(first),tp),min(td,min(last))): #Attention a l'ordre 
 						if c._min_deltamin_success is not None:
 							c._min_deltamin_success=min(c_add._deltamin,c._min_deltamin_success)
 						else:
 							c._min_deltamin_success=c_add._deltamin
-
+                                                
 						#étrange je pense que time_extention est important la aussi
-						if c._deltamax is not None:
-							if c._min_deltamin_success is not None:
-								c._deltamax=min(c._min_deltamin_success,c._deltamax)
-						else:
-							c._deltamax=c._min_deltamin_success
+					        if c._deltamax is not None:
+				    		        if c._min_deltamin_success is not None:
+			    				        c._deltamax=min(c._min_deltamin_success,c._deltamax)
+		    			        else:
+	    					        c._deltamax=c._min_deltamin_success
 			            	
+             			     	        is_max = False
 
 					self._nodeinterdeque.append(c_add)
 					
-					is_max = False
 			
 			#Possibilité de manipulation du parcours de l'arbre
 
@@ -250,9 +251,9 @@ class CliqueMaster:
 					c_add=CliqueCritique((c._X,(c._tlimitb,c._tlimite),c._deltamin,c._deltamax,td,tp))
 					sys.stderr.write("Trying " + str(c_add) + " but deltamin = deltamax\n")
 
-			if is_max : #deltamax=delta + add c to R
+			if is_max and c._min_deltamin_success == None: #deltamax=delta + add c to R
 				sys.stderr.write(str(c) + " is maximal\n")
-				c_add=CliqueCritique((c._X,(c._tlimitb,c._tlimite),c._deltamin,delta,td,tp))
+                                c_add=CliqueCritique((c._X,(c._tlimitb,c._tlimite),c._deltamin,delta,td,tp))
 				self._R.add(c_add) #ajout au set de retour
 				sys.stderr.write("Return " + str(c_add) + "\n")
 

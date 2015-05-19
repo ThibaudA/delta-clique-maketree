@@ -378,7 +378,6 @@ class TestClique(unittest.TestCase):
 			CliqueCritique((frozenset([1,3]), (2,2),0,10,2,2)),
 			CliqueCritique((frozenset([1,4]), (3,3),0,10,3,3)),
 			CliqueCritique((frozenset([1,2]), (1,2),1,10,2,1)),
-			CliqueCritique((frozenset([1,2,3]), (2,5),3,3,2,5)),
 			CliqueCritique((frozenset([1,2,3,4]), (2,5),3,4,2,5)),
 			CliqueCritique((frozenset([1,2,3,4]), (1,5),4,10,2,5))
 		])
@@ -387,6 +386,43 @@ class TestClique(unittest.TestCase):
 		for c in R_expected:
 			debug_msg += str(c) + "\n"
 		self.assertEqual(R, R_expected, debug_msg)
+
+
+
+	def test_varianteajoutwhenmax(self):
+                sousflot   = list([
+		    Clique((frozenset([1, 2]), (1, 1),(1,1))),
+		    Clique((frozenset([3, 1]), (4, 4),(4,4))),
+		    Clique((frozenset([2, 3]), (5, 5),(5,5))),
+		    Clique((frozenset([3, 1]), (6, 6),(6,6))),
+		    Clique((frozenset([2, 1]), (6, 6),(6,6))),
+		])
+                for c in sousflot:
+                    self.Cm.addClique(c)
+
+		self.Cm._nodes = {1: set([2,3]), 2: set([1,3]), 3: set([1,2])}
+		self.Cm._times = {frozenset([1, 2]): [1,6], frozenset([1, 3]): [4,6],frozenset([2, 3]): [5]}
+
+		R = self.Cm.getTree(10)
+		R_expected = set([
+			CliqueCritique((frozenset([1,2]), (1,1),0,5,1,1)),
+			CliqueCritique((frozenset([1,2]), (6,6),0,5,6,6)),
+			CliqueCritique((frozenset([1,3]), (4,4),0,2,4,4)),
+			CliqueCritique((frozenset([2,3]), (5,5),0,5,5,5)),
+			CliqueCritique((frozenset([1,2,3]), (1,6),5,10,5,5)),
+			CliqueCritique((frozenset([1,2,3]), (5,6),1,2,5,6)),
+			CliqueCritique((frozenset([1,3]), (6,6),0,2,6,6)),
+			CliqueCritique((frozenset([1,2,3]), (1,5),4,5,1,5)),
+			CliqueCritique((frozenset([1,2,3]), (4,6),2,5,5,6)),
+			CliqueCritique((frozenset([1,2]), (1,6),5,10,6,1)),
+			CliqueCritique((frozenset([1,3]), (4,6),2,10,6,4))
+		])
+		debug_msg = "\nGot :\n" + str(self.Cm)
+		debug_msg += "\nExpected :\n"
+		for c in R_expected:
+			debug_msg += str(c) + "\n"
+		self.assertEqual(R, R_expected, debug_msg)
+
 
 
 
