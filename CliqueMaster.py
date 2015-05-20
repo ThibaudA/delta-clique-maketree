@@ -113,7 +113,10 @@ class CliqueMaster:
 						    c._deltamax=new_t-td 
 						
 					    sys.stderr.write("Adding " + str(c_add) + " (time extension)\n")	
-				            self.addClique(c_add)  #Ajout dans la file.
+				            if td == c_add.getTd(self._times, delta):
+					    	self._interdeque.append(c_add)  #Ajout dans la file si td ne bouge pas on fait suivre les info des successeurs.
+					    else:
+						self._nodeinterdeque.append(c_add)  #Ajout dans la file.
 					else:
  				            #if different clique we dont want to change deltamax/min
 					    c_add = Clique((c._X, (c._tb, new_t),(c._tlimitb,c._tlimite)),c._candidates)
@@ -158,8 +161,10 @@ class CliqueMaster:
 				                        	c_wannabe=CliqueCritique((c._X,(c._tlimitb,c._tlimite),c._deltamin,time_extension,td,tp))
 								sys.stderr.write("Trying " + str(c_wannabe) + " but time extension\n")
 						else: c._deltamax=tp-new_t
-					    	
-                                        	self.addClique(c_add)
+						if tp == c_add.getTp(self._times, delta):
+					    		self._interdeque.append(c_add)  #Ajout dans la file si tp ne bouge pas on fait suivre les info des successeurs.
+					    	else:
+                                        		self._nodeinterdeque.append(c_add)
 						sys.stderr.write("Adding " + str(c_add) + " (left time extension)\n")
 					else:	
  				            	#if different clique we dont want to change deltamax/min
@@ -171,7 +176,6 @@ class CliqueMaster:
 							c._deltamax = None
 							c_wannabe=CliqueCritique((c._X,(c._tlimitb,c._tlimite),c._deltamin,tp-new_t,td,tp))
 							sys.stderr.write("Trying " + str(c_wannabe) + " but time extension\n")
-
 						self._interdeque.append(c_add)
 						sys.stderr.write("Adding " + str(c_add) + " (left time extension)\n")
 				else:
@@ -208,13 +212,13 @@ class CliqueMaster:
 
 					#L'ajout de noeud n'as d'inflence sur le calcul de deltamax que lorsque les tp et td
 					#des deux cliques sont identiques
-                                        
                                         if (tp,td)==(max(max(first),tp),min(td,min(last))): #Attention a l'ordre 
 						if c._min_deltamin_success is not None:
 							c._min_deltamin_success=min(c_add._deltamin,c._min_deltamin_success)
 						else:
 							c._min_deltamin_success=c_add._deltamin
                                                 
+             			     	        is_max = False
 						#étrange je pense que time_extention est important la aussi
 					        if c._deltamax is not None:
 				    		        if c._min_deltamin_success is not None:
@@ -222,7 +226,6 @@ class CliqueMaster:
 		    			        else:
 	    					        c._deltamax=c._min_deltamin_success
 			            	
-             			     	        is_max = False
 
 					self._nodeinterdeque.append(c_add)
 					
@@ -251,7 +254,7 @@ class CliqueMaster:
 					c_add=CliqueCritique((c._X,(c._tlimitb,c._tlimite),c._deltamin,c._deltamax,td,tp))
 					sys.stderr.write("Trying " + str(c_add) + " but deltamin = deltamax\n")
 
-			if is_max and c._min_deltamin_success == None: #deltamax=delta + add c to R
+			if is_max : #deltamax=delta + add c to R
 				sys.stderr.write(str(c) + " is maximal\n")
                                 c_add=CliqueCritique((c._X,(c._tlimitb,c._tlimite),c._deltamin,delta,td,tp))
 				self._R.add(c_add) #ajout au set de retour

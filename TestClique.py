@@ -425,6 +425,46 @@ class TestClique(unittest.TestCase):
 
 
 
+	def test_transfertsuccess_same_td_tp(self):
+                sousflot   = list([
+		    Clique((frozenset([1, 2]), (1, 1),(1,1))),
+		    Clique((frozenset([3, 2]), (3, 3),(3,3))),
+		    Clique((frozenset([1, 3]), (3, 3),(3,3))),
+		    Clique((frozenset([3, 1]), (4, 4),(4,4))),
+		    Clique((frozenset([2, 1]), (4, 4),(4,4))),
+		    Clique((frozenset([2, 3]), (4, 4),(4,4))),
+		    Clique((frozenset([2, 1]), (9, 9),(9,9))),
+		])
+                for c in sousflot:
+                    self.Cm.addClique(c)
+
+		self.Cm._nodes = {1: set([2,3]), 2: set([1,3]), 3: set([1,2])}
+		self.Cm._times = {frozenset([1, 2]): [1,4,9], frozenset([1, 3]): [3,4],frozenset([2, 3]): [3,4]}
+
+		R = self.Cm.getTree(10)
+		R_expected = set([
+			CliqueCritique((frozenset([1,2]), (1,1),0,3,1,1)),
+			CliqueCritique((frozenset([2,3]), (3,3),0,1,3,3)),
+			CliqueCritique((frozenset([1,2,3]), (1,9),5,10,4,3)),
+			CliqueCritique((frozenset([1,2,3]), (3,4),1,3,4,4)),
+			CliqueCritique((frozenset([1,2,3]), (4,4),0,1,4,4)),
+			CliqueCritique((frozenset([1,2]), (9,9),0,5,9,9)),
+			CliqueCritique((frozenset([1,2]), (1,4),3,5,4,1)),
+			CliqueCritique((frozenset([1,2]), (1,9),5,10,9,1)),
+			CliqueCritique((frozenset([1,3]), (3,3),0,1,3,3)),
+			CliqueCritique((frozenset([2,3]), (3,4),1,3,4,3)),
+			CliqueCritique((frozenset([1,2,3]), (1,4),3,5,4,3)),
+			CliqueCritique((frozenset([1,3]), (3,4),1,3,4,3)),
+			CliqueCritique((frozenset([1,2,3]), (1,3),2,3,1,3))
+		])
+		debug_msg = "\nGot :\n" + str(self.Cm)
+		debug_msg += "\nExpected :\n"
+		for c in R_expected:
+			debug_msg += str(c) + "\n"
+		self.assertEqual(R, R_expected, debug_msg)
+
+
+
 
 if __name__ == '__main__':
 	suite = unittest.TestLoader().loadTestsFromTestCase(TestClique)
