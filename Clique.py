@@ -151,7 +151,152 @@ class Clique:
 		#sys.stderr.write("    new_t = %s\n" % (str(t)))
 		return t,sameclique
 
+	def getFirstTInIntervalbackup(self, times, nodes, td, delta):
+		# Plus petit t entre te et td + delta impliquant (u,v) ?
+		t =  None
+                sameclique=False
+		# Bien extraire tous les noeuds de la clique et du voisinage de chaque noeud de la clique (c'est ici qu'on fait grossir le temps pour pouvoir ajouter des noeuds)
+		# Get all links implying at least one of X's nodes.
+		candidates = set()
+		for u in self._X:
+			for n_u in nodes[u]:
+				link = frozenset([u,n_u])
+
+				if link in times:
+					candidates.add(link)
+
+		# Get the intercontact times in [te;td+delta]
+		for candidate in candidates:
+			index = bisect.bisect_right(times[candidate], self._te)
+
+			if len(times[candidate]) == 1 and index == 1 and times[candidate][index-1] <= td + delta:
+				if times[candidate][index - 1] > self._te:
+					if t>times[candidate][index-1] or t==None: 
+                                            t = times[candidate][index-1]
+                                            if candidate.issubset(self._X):
+                                                sameclique=True
+                                            else :
+                                                 sameclique=False
+                                        elif t==times[candidate][index-1]:
+                                            if candidate.issubset(self._X):
+                                                sameclique=True
+			
+                        elif index < len(times[candidate]) and times[candidate][index] <= td + delta:
+				if times[candidate][index] > self._te:
+					if t>times[candidate][index] or t==None:
+        					t = times[candidate][index]
+                                                if candidate.issubset(self._X):
+                                                    sameclique=True
+                                                else :
+                                                    sameclique=False
+                                        elif t==times[candidate][index]:
+                                            if candidate.issubset(self._X):
+                                                sameclique=True
+		return t,sameclique
+
+
+	def isTdTpMoving(self, times,nodes,tdlinks,td,new_t):
+		for u in self._X:
+			for n_u in nodes[u]:
+				link = frozenset([u,n_u])
+				if link in times:
+					if td in times[link]:
+						tdlinks.discard(link)
+		if len(tdlinks) == 0:
+			return True
+		else:
+			return False
+		
+
+
+	def getLastTInIntervalbackup(self, times, nodes, tp, delta):
+		# Plus petit t entre tb et tp - delta impliquant (u,v) ? 
+		t = None
+                sameclique=None
+		# Bien extraire tous les noeuds de la clique et du voisinage de chaque noeud de la clique (c'est ici qu'on fait grossir le temps pour pouvoir ajouter des noeuds)
+		
+		# Get all links implying at least one of X's nodes.
+		candidates = set()
+		for u in self._X:
+			for n_u in nodes[u]:
+				link = frozenset([u,n_u])
+				if link in times:
+					candidates.add(link)
+		# Get the intercontact times in [tp - delta; tb]
+		for candidate in candidates:
+                        index = bisect.bisect_left(times[candidate], self._tb)
+                        index = index - 1
+                        
+                        if index >= 0 and times[candidate][index] >= tp - delta:
+				if  t<times[candidate][index] or t==None:
+                            		t = times[candidate][index]
+                                        if candidate.issubset(self._X):
+                                            sameclique=True
+                                        else :
+                                            sameclique=False
+				elif  t==times[candidate][index]:
+                                        if candidate.issubset(self._X):
+                                            sameclique=True
+		#sys.stderr.write("    new_t = %s\n" % (str(t)))
+		return t,sameclique
+
+
 	def getTd(self, times, delta):
+		# Pour chaque lien dans X, Récupérer dans T les temps x tq te-delta < x < te. Si len(T) = 1, regarder si x est plus petit que le tmin déjà connu.
+		td = 0
+		max_t = None
+		tdlinks=set([])
+		for u in self._X:
+			for v in self._X:
+				link = frozenset([u,v])
+				if link in times:
+					a =	([x for x in times[link] if(x >= max(self._tb, self._te - delta) and x <= self._te)])
+					if len(a) > 0:
+						if max_t is not None:
+							if max_t > max(a):
+								max_t = max(a)
+								tdlinks=set([link])
+							elif max_t == max(a):
+								tdlinks.add(link)
+						else:
+							max_t = max(a)
+							tdlinks=set([link])
+
+		if max_t is not None:
+			td = max_t
+		else:
+			td = self._te - delta
+		#sys.stderr.write("    td = %d\n" % (td))
+		return td,tdlinks
+	
+	def getTp(self, times, delta):
+		# Pour chaque lien dans X, Récupérer dans T les temps x tq te-delta < x < te. Si len(T) = 1, regarder si x est plus petit que le tmin déjà connu.
+		tp = 0
+		min_t = None
+		tplinks=set([])
+		for u in self._X:
+			for v in self._X:
+				link = frozenset([u,v])
+				if link in times:
+					a =	([x for x in times[link] if(x <= min(self._te, self._tb + delta) and x >= self._tb)])
+					if len(a) > 0:
+						if min_t is not None:
+							if min_t < min(a):
+								min_t = min(a)
+								tplinks=set([link])
+							elif min_t == min(a):
+								tplinks.add(link)
+						else:
+							min_t = min(a)
+							tplinks=set([link])
+		if min_t is not None:
+			tp = min_t
+		else:
+			tp = self._tb + delta
+		#sys.stderr.write("    tp = %d\n" % (tp))
+		return tp,tplinks
+	
+	def getTdbackup(self, times, delta):
 		# Pour chaque lien dans X, Récupérer dans T les temps x tq te-delta < x < te. Si len(T) = 1, regarder si x est plus petit que le tmin déjà connu.
 		td = 0
 		max_t = []
@@ -169,7 +314,7 @@ class Clique:
 		#sys.stderr.write("    td = %d\n" % (td))
 		return td
 	
-	def getTp(self, times, delta):
+	def getTpbackup(self, times, delta):
 		# Pour chaque lien dans X, Récupérer dans T les temps x tq te-delta < x < te. Si len(T) = 1, regarder si x est plus petit que le tmin déjà connu.
 		tp = 0
 		min_t = []
@@ -186,8 +331,6 @@ class Clique:
 			tp = self._tb + delta
 		#sys.stderr.write("    tp = %d\n" % (tp))
 		return tp
-	
-
 
 
 

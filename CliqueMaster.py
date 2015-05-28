@@ -94,7 +94,7 @@ class CliqueMaster:
 			time_extension=None
 
 			# Grow time on the right side
-			td = c.getTd(self._times, delta)
+			td,tdlinks = c.getTd(self._times, delta)
 			if c._te != td + delta:
 				#sameclique if the new link is in the clique
 				new_t,sameclique = c.getFirstTInInterval(self._times, self._nodes, td, delta)
@@ -113,7 +113,8 @@ class CliqueMaster:
 						    c._deltamax=new_t-td 
 						
 					    sys.stderr.write("Adding " + str(c_add) + " (time extension)\n")	
-				            if td == c_add.getTd(self._times, delta):
+					    if not  c.isTdTpMoving(self._times,self._nodes,tdlinks,td,new_t):
+				            #if td == c_add.getTd(self._times, delta):
 					    	self._interdeque.append(c_add)  #Ajout dans la file si td ne bouge pas on fait suivre les info des successeurs.
 					    else:
 						self._nodeinterdeque.append(c_add)  #Ajout dans la file.
@@ -136,7 +137,7 @@ class CliqueMaster:
 				sys.stderr.write(str(c) + " cannot grow on the right side\n")
 
 			# Grow time on the left side 
-			tp = c.getTp(self._times, delta)
+			tp,tplinks = c.getTp(self._times, delta)
 			if c._tb != tp - delta:
 				new_t,sameclique = c.getLastTInInterval(self._times, self._nodes, tp, delta)
 
@@ -161,7 +162,8 @@ class CliqueMaster:
 				                        	c_wannabe=CliqueCritique((c._X,(c._tlimitb,c._tlimite),c._deltamin,time_extension,td,tp))
 								sys.stderr.write("Trying " + str(c_wannabe) + " but time extension\n")
 						else: c._deltamax=tp-new_t
-						if tp == c_add.getTp(self._times, delta):
+						#if tp == c_add.getTp(self._times, delta):
+					    	if not  c.isTdTpMoving(self._times,self._nodes,tplinks,tp,new_t):
 					    		self._interdeque.append(c_add)  #Ajout dans la file si tp ne bouge pas on fait suivre les info des successeurs.
 					    	else:
                                         		self._nodeinterdeque.append(c_add)
