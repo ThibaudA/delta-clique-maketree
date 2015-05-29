@@ -192,8 +192,6 @@ class CliqueMaster:
 			# Grow node set
 			candidates = c.getAdjacentNodes(self._times, self._nodes, delta)
 			sys.stderr.write("    Candidates : %s.\n" % (str(candidates)))
-			print c._min_deltamin_success
-			print (tp,td)
 			for node in candidates:
 				
 				isclique,first,last,maxinterval=c.isClique(self._times,node,delta)
@@ -215,8 +213,6 @@ class CliqueMaster:
 
 					#L'ajout de noeud n'as d'inflence sur le calcul de deltamax que lorsque les tp et td
 					#des deux cliques sont identiques
-					print (tp,td)
-					print (max(max(first),tp),min(td,min(last)))
                                         if (tp,td)==(max(max(first),tp),min(td,min(last))): #Attention a l'ordre 
 						if c._min_deltamin_success is not None:
 							c._min_deltamin_success=min(c_add._deltamin,c._min_deltamin_success)
