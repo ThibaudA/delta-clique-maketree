@@ -20,6 +20,7 @@ class TestClique(unittest.TestCase):
 			Clique((frozenset([1,2]), (1,1),(1,1)),set([]))
 		])	
                 for c in sousflot:
+                    c._td,c._tp = c._tb,c._tb
                     self.Cm.addClique(c)
 		self.Cm._times = {frozenset([1,2]):[1]}
 		self.Cm._nodes = {1:set([2]), 2:set([1])}
@@ -34,6 +35,7 @@ class TestClique(unittest.TestCase):
 			Clique((frozenset([1,2]), (1,1),(1,1)),set([]))
 		])	
                 for c in sousflot:
+                    c._td,c._tp = c._tb,c._tb
                     self.Cm.addClique(c)
 		self.Cm._times = {frozenset([1,2]):[1]}
 		self.Cm._nodes = {1:set([2]), 2:set([1])}
@@ -47,6 +49,7 @@ class TestClique(unittest.TestCase):
 		    Clique((frozenset([2, 3]), (3, 3),(3,3)),set([]))
 		])
                 for c in sousflot:
+                    c._td,c._tp = c._tb,c._tb
                     self.Cm.addClique(c)
 		self.Cm._nodes = {1: set([2, 3]), 2: set([1, 3]), 3: set([1, 2])}
 		self.Cm._times = {frozenset([1, 3]): [2], frozenset([1, 2]): [1], frozenset([2, 3]): [3]}
@@ -76,6 +79,7 @@ class TestClique(unittest.TestCase):
 		    Clique((frozenset([1, 2]), (3, 3),(3,3)),set([]))
 		])
                 for c in sousflot:
+                    c._td,c._tp = c._tb,c._tb
                     self.Cm.addClique(c)
 		self.Cm._nodes = {1: set([2]), 2: set([1])}
 		self.Cm._times = {frozenset([1, 2]): [1, 3]}
@@ -99,6 +103,7 @@ class TestClique(unittest.TestCase):
 		    Clique((frozenset([1, 2]), (3, 3),(3,3)),set([]))
 		])
                 for c in sousflot:
+                    c._td,c._tp = c._tb,c._tb
                     self.Cm.addClique(c)
 		self.Cm._nodes = {1: set([2]), 2: set([1])}
 		self.Cm._times = {frozenset([1, 2]): [1, 3]}
@@ -124,6 +129,7 @@ class TestClique(unittest.TestCase):
 		    Clique((frozenset([1, 2]), (4, 4),(4,4)),set([]))
 		])
                 for c in sousflot:
+                    c._td,c._tp = c._tb,c._tb
                     self.Cm.addClique(c)
 		self.Cm._nodes = {1: set([2, 3]), 2: set([1, 3]), 3: set([1, 2])}
 		self.Cm._times = {frozenset([1, 3]): [3], frozenset([1, 2]): [1, 4], frozenset([2, 3]): [2]}
@@ -152,6 +158,7 @@ class TestClique(unittest.TestCase):
 		    Clique((frozenset([1, 2]), (4, 4),(4,4)),set([]))
 		])
                 for c in sousflot:
+                    c._td,c._tp = c._tb,c._tb
                     self.Cm.addClique(c)
 		self.Cm._nodes = {1: set([2, 3]), 2: set([1, 3]), 3: set([1, 2])}
 		self.Cm._times = {frozenset([1, 3]): [3], frozenset([1, 2]): [1, 4], frozenset([2, 3]): [2]}
@@ -183,6 +190,7 @@ class TestClique(unittest.TestCase):
 		    Clique((frozenset([1, 2]), (4, 4),(4,4)),set([]))
 		])
                 for c in sousflot:
+                    c._td,c._tp = c._tb,c._tb
                     self.Cm.addClique(c)
 		self.Cm._nodes = {1: set([2, 3]), 2: set([1, 3]), 3: set([1, 2])}
 		self.Cm._times = {frozenset([1, 3]): [3], frozenset([1, 2]): [1, 4], frozenset([2, 3]): [2]}
@@ -215,6 +223,7 @@ class TestClique(unittest.TestCase):
 		    Clique((frozenset([1, 3]), (1, 1),(1,1))),
 		])
                 for c in sousflot:
+                    c._td,c._tp = c._tb,c._tb
                     self.Cm.addClique(c)
 		self.Cm._nodes = {1: set([2, 3]), 2: set([1, 3]), 3: set([1, 2])}
 		self.Cm._times = {frozenset([1, 3]): [1], frozenset([1, 2]): [1], frozenset([2, 3]): [1]}
@@ -237,6 +246,7 @@ class TestClique(unittest.TestCase):
 		    Clique((frozenset([2, 3]), (2, 2),(2,2)))
 		])
                 for c in sousflot:
+                    c._td,c._tp = c._tb,c._tb
                     self.Cm.addClique(c)
 		self.Cm._nodes = {1: set([2, 3]), 2: set([1, 3]), 3: set([1, 2])}
 		self.Cm._times = {frozenset([1, 3]): [1], frozenset([1, 2]): [1], frozenset([2, 3]): [1,2]}
@@ -263,6 +273,7 @@ class TestClique(unittest.TestCase):
 
 		])
                 for c in sousflot:
+                    c._td,c._tp = c._tb,c._tb
                     self.Cm.addClique(c)
 		self.Cm._nodes = {1: set([2]), 2: set([1, 3]), 3: set([2])}
 		self.Cm._times = {frozenset([1, 2]): [1,3,6], frozenset([2, 3]): [2]}
@@ -293,6 +304,7 @@ class TestClique(unittest.TestCase):
 
 		])
                 for c in sousflot:
+                    c._td,c._tp = c._tb,c._tb
                     self.Cm.addClique(c)
 		self.Cm._nodes = {1: set([2,3]), 2: set([1, 3]), 3: set([1,2])}
 		self.Cm._times = {frozenset([1, 2]): [2], frozenset([2, 3]): [2],frozenset([1, 3]): [1,4]}
@@ -325,6 +337,7 @@ class TestClique(unittest.TestCase):
 		    Clique((frozenset([1, 3]), (5, 5),(5,5))),
 		])
                 for c in sousflot:
+                    c._td,c._tp = c._tb,c._tb
                     self.Cm.addClique(c)
 		self.Cm._nodes = {1: set([2,3]), 2: set([1, 3]), 3: set([1,2])}
 		self.Cm._times = {frozenset([1, 2]): [2], frozenset([2, 3]): [2],frozenset([1, 3]): [1,3,5]}
@@ -364,6 +377,7 @@ class TestClique(unittest.TestCase):
 		    Clique((frozenset([2, 4]), (5, 5),(5,5))),
 		])
                 for c in sousflot:
+                    c._td,c._tp = c._tb,c._tb
                     self.Cm.addClique(c)
 
 		self.Cm._nodes = {1: set([2,3,4]), 2: set([1,3,4]), 3: set([1,2,4]),4: set([1,2,3])}
@@ -398,6 +412,7 @@ class TestClique(unittest.TestCase):
 		    Clique((frozenset([2, 1]), (6, 6),(6,6))),
 		])
                 for c in sousflot:
+                    c._td,c._tp = c._tb,c._tb
                     self.Cm.addClique(c)
 
 		self.Cm._nodes = {1: set([2,3]), 2: set([1,3]), 3: set([1,2])}
@@ -436,6 +451,7 @@ class TestClique(unittest.TestCase):
 		    Clique((frozenset([2, 1]), (9, 9),(9,9))),
 		])
                 for c in sousflot:
+                    c._td,c._tp = c._tb,c._tb
                     self.Cm.addClique(c)
 
 		self.Cm._nodes = {1: set([2,3]), 2: set([1,3]), 3: set([1,2])}
