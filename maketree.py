@@ -16,10 +16,10 @@ for line in sys.stdin:
 
 	link = frozenset([u,v])
 	time = (t,t)
-	if link == frozenset([2,3]):
-                c_add=Clique((link,(t,t),(t,t)))
-                c_add._td,c_add._tp=t,t
-		Cm.addClique(c_add)
+        c_add=Clique((link,(t,t),(t,t)))
+        c_add._td,c_add._tp=t,t
+        if t == 5:
+           Cm.addClique(c_add)
 	
 	# Populate data structures
 	if not times.has_key(link):

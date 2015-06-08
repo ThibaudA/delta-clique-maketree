@@ -253,8 +253,7 @@ class TestClique(unittest.TestCase):
 
 		R = self.Cm.getTree(5)
 		R_expected = set([
-			CliqueCritique((frozenset([1,2,3]), (1,2),1,5,1,1)),
-			CliqueCritique((frozenset([1,2,3]), (1,1),0,1,1,1)),
+			CliqueCritique((frozenset([1,2,3]), (1,2),0,5,1,1)),
 			CliqueCritique((frozenset([2,3]), (1,2),1,5,2,1)),
 			CliqueCritique((frozenset([2,3]), (2,2),0,1,2,2))
 		])
@@ -356,8 +355,7 @@ class TestClique(unittest.TestCase):
 
 			CliqueCritique((frozenset([1,2,3]), (1,2),1,2,1,2)),
 			CliqueCritique((frozenset([1,2,3]), (2,3),1,2,2,3)),
-			CliqueCritique((frozenset([1,2,3]), (1,3),2,3,2,2)),
-			CliqueCritique((frozenset([1,2,3]), (1,5),3,7,2,2))
+			CliqueCritique((frozenset([1,2,3]), (1,5),2,7,2,2))
 		])
 		debug_msg = "\nGot :\n" + str(self.Cm)
 		debug_msg += "\nExpected :\n"
@@ -392,8 +390,7 @@ class TestClique(unittest.TestCase):
 			CliqueCritique((frozenset([1,3]), (2,2),0,10,2,2)),
 			CliqueCritique((frozenset([1,4]), (3,3),0,10,3,3)),
 			CliqueCritique((frozenset([1,2]), (1,2),1,10,2,1)),
-			CliqueCritique((frozenset([1,2,3,4]), (2,5),3,4,2,5)),
-			CliqueCritique((frozenset([1,2,3,4]), (1,5),4,10,2,5))
+			CliqueCritique((frozenset([1,2,3,4]), (1,5),3,10,2,5))
 		])
 		debug_msg = "\nGot :\n" + str(self.Cm)
 		debug_msg += "\nExpected :\n"
@@ -425,10 +422,9 @@ class TestClique(unittest.TestCase):
 			CliqueCritique((frozenset([1,3]), (4,4),0,2,4,4)),
 			CliqueCritique((frozenset([2,3]), (5,5),0,5,5,5)),
 			CliqueCritique((frozenset([1,2,3]), (1,6),5,10,5,5)),
-			CliqueCritique((frozenset([1,2,3]), (5,6),1,2,5,6)),
 			CliqueCritique((frozenset([1,3]), (6,6),0,2,6,6)),
 			CliqueCritique((frozenset([1,2,3]), (1,5),4,5,1,5)),
-			CliqueCritique((frozenset([1,2,3]), (4,6),2,5,5,6)),
+			CliqueCritique((frozenset([1,2,3]), (4,6),1,5,5,6)),
 			CliqueCritique((frozenset([1,2]), (1,6),5,10,6,1)),
 			CliqueCritique((frozenset([1,3]), (4,6),2,10,6,4))
 		])
@@ -461,15 +457,13 @@ class TestClique(unittest.TestCase):
 		R_expected = set([
 			CliqueCritique((frozenset([1,2]), (1,1),0,3,1,1)),
 			CliqueCritique((frozenset([2,3]), (3,3),0,1,3,3)),
-			CliqueCritique((frozenset([1,2,3]), (1,9),5,10,4,3)),
-			CliqueCritique((frozenset([1,2,3]), (3,4),1,3,4,4)),
-			CliqueCritique((frozenset([1,2,3]), (4,4),0,1,4,4)),
+			CliqueCritique((frozenset([1,2,3]), (1,9),3,10,4,3)),
+			CliqueCritique((frozenset([1,2,3]), (3,4),0,3,4,4)),
 			CliqueCritique((frozenset([1,2]), (9,9),0,5,9,9)),
 			CliqueCritique((frozenset([1,2]), (1,4),3,5,4,1)),
 			CliqueCritique((frozenset([1,2]), (1,9),5,10,9,1)),
 			CliqueCritique((frozenset([1,3]), (3,3),0,1,3,3)),
 			CliqueCritique((frozenset([2,3]), (3,4),1,3,4,3)),
-			CliqueCritique((frozenset([1,2,3]), (1,4),3,5,4,3)),
 			CliqueCritique((frozenset([1,3]), (3,4),1,3,4,3)),
 			CliqueCritique((frozenset([1,2,3]), (1,3),2,3,1,3))
 		])
