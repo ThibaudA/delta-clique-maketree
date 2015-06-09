@@ -14,13 +14,13 @@ class CliqueCritique:
                 self._tlimite=tlimite
 	
 	def __eq__(self, other):
-		if self._X == other._X and self._tlimitb == other._tlimitb and self._tlimite == other._tlimite and self._deltamin == other._deltamin  and self._deltamax == other._deltamax:
+		if self._X == other._X and self._td == other._td and self._tp == other._tp and self._deltamin == other._deltamin  and self._deltamax == other._deltamax:
 			return True
 		else:
 			return False
 
 	def __hash__(self):
-		return hash((self._X,self._tlimitb,self._tlimite,self._deltamin,self._td,self._tp))
+		return hash((self._X,self._deltamin,self._deltamax,self._deltamin,self._td,self._tp))
 
 	def __str__(self):
 		return ','.join(map(str, list(self._X)))  + " " + str(self._tlimitb) + "," + str(self._tlimite) + " " +  str(self._deltamin) + " " + str(self._deltamax) + " " + str(self._td)+ " " + str(self._tp)

@@ -101,12 +101,12 @@ class CliqueMaster:
 				            c_add = Clique((c._X, (c._tb, new_t),(c._tlimitb,new_t)),c._candidates)
                                             c_add._td=c_add.getTd(self._times,delta)
                                             c_add._tp=c._tp
+					    
 					    if c_add._td != c._td:
                                                 if new_t-c._td>c._deltamin: 
                                                     
 						    c_add._deltamin=new_t-c._td #Change deltamin if needed
                                                 else: c_add._deltamin=c._deltamin
-					    
 					    #On prépare l'ajout de c au set de cliquescritiques.
 					        c._deltamax=new_t-c._td 
 						
@@ -223,9 +223,10 @@ class CliqueMaster:
 				        c_add._tp = max(max(first),c._tp)
                                         c_add._td = min(c._td,min(last))
                                         
-					c_add._deltamin=max(c._deltamin,maxinterval,c_add._tlimite-min(last),max(first)-c_add._tlimitb,c_add._tlimite-c._td,c._tp-c_add._tlimitb)
+					#c_add._deltamin=max(c._deltamin,maxinterval,c_add._tlimite-min(last),max(first)-c_add._tlimitb,c_add._tlimite-c._td,c._tp-c_add._tlimitb)
+					c_add._deltamin=c_add.getDeltaMin(self._times)
 					
-		
+					#print c_add.getDeltaMin(self._times)
 
 					
              			     	is_max = False
@@ -245,22 +246,17 @@ class CliqueMaster:
 			    				        c._deltamax=None
                                                             else:
 			    				        c._deltamax=c._min_deltamin_success
-                                                elif c_add._td == c._te and c_add._tp == c._tb:
+                                                else:
 	    					        c._deltamax=c._min_deltamin_success
 			            	
-                                        if c_add._td == c._tb and c_add._tp == c._te:
-					    self._nodeinterdeque.append(c_add)
-					    sys.stderr.write("Adding " + str(c_add) + " from "+ str(c) +" (node extension)\n")
-				        else:
+					self._nodeinterdeque.append(c_add)
+					sys.stderr.write("Adding " + str(c_add) + " from "+ str(c) +" (node extension)\n")
 
-					    sys.stderr.write("Trying " + str(c_add) + " from "+ str(c) +" (node extension)\n")
 			
 			#Possibilité de manipulation du parcours de l'arbre
 			for c_add in self._interdeque:
 				#On transmet le deltamin au successeurs du cliques pour plus tard
                                 #c_add._min_deltamin_success=c._min_deltamin_success
-                                print c._td,c._tp
-                                print c_add._td,c_add._tp
                                 self.addClique(c_add)
 			self._interdeque=deque()
 			

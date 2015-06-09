@@ -194,6 +194,57 @@ class Clique:
 		return tp
 
 
+	def getDeltaMin(self, times):
+		# Pour chaque lien dans X, Récupérer dans T les temps x tq te-delta < x < te. Si len(T) = 1, regarder si x est plus petit que le tmin déjà connu.
+		deltamin=None
+		maxinterval=0
+		max_t = []
+		min_t = []
+		for u in self._X:
+			for v in self._X:
+				link = frozenset([u,v])
+				if link in times:
+					righttimes =	([x for x in times[link] if(x >= self._td and x <= self._te)])
+					if len(righttimes) > 0:
+						min_t.append(min(righttimes))
+					lefttimes =	([x for x in times[link] if(x <= self._tp and x >= self._tb)])
+					if len(lefttimes) > 0:
+						max_t.append(max(lefttimes))
+						
+
+
+
+		if len(min_t) > 0:
+			tright = max(min_t)
+		else:
+			tright = self._td
+
+		if len(max_t) > 0:
+			tleft = min(max_t)
+		else:
+			tleft = self._tp
+
+		for u in self._X:
+			for v in self._X:
+				link = frozenset([u,v])
+				if link in times:
+
+					insidetimes =	([x for x in times[link] if(x >= tleft and x <= tright)])	
+					if len(insidetimes)<=1:
+						interval=[0]
+					else:
+						interval=[j-i for i,j in zip(insidetimes[:-1],insidetimes[1:])]
+					if max(interval)>maxinterval or maxinterval==None: 
+						maxinterval=max(interval) #max interval for this two nodes
+
+
+		deltamin=max(maxinterval,max(tright-self._td,self._tp-tleft))
+
+
+		#sys.stderr.write("    td = %d\n" % (td))
+		return deltamin
+
+
 
 if __name__ == '__main__':
 	c = Clique((frozenset([1,2,3]), (1,3)))
