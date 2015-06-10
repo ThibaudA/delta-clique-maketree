@@ -473,6 +473,39 @@ class TestClique(unittest.TestCase):
 			debug_msg += str(c) + "\n"
 		self.assertEqual(R, R_expected, debug_msg)
 
+	def test_ajoutdeneouddivers(self):
+                sousflot   = list([
+		    Clique((frozenset([3, 2]), (1, 1),(1,1))),
+		    Clique((frozenset([1, 2]), (2, 2),(2,2))),
+		    Clique((frozenset([1, 3]), (3, 3),(3,3))),
+		    Clique((frozenset([3, 2]), (3, 3),(3,3))),
+		    Clique((frozenset([2, 1]), (5, 5),(5,5))),
+		])
+                for c in sousflot:
+                    c._td,c._tp = c._tb,c._tb
+                    self.Cm.addClique(c)
+
+                self.Cm._nodes = {1: set([2,3]), 2: set([1,3]), 3: set([1,2])}
+		self.Cm._times = {frozenset([1, 2]): [2,5], frozenset([1, 3]): [3],frozenset([2, 3]): [1,3]}
+
+		R = self.Cm.getTree(10)
+		R_expected = set([
+			CliqueCritique((frozenset([1,3]), (3,3),0,3,3,3)),
+			CliqueCritique((frozenset([2,3]), (3,3),0,2,3,3)),
+			CliqueCritique((frozenset([2,3]), (1,1),0,2,1,1)),
+			CliqueCritique((frozenset([1,2]), (2,2),0,3,2,2)),
+			CliqueCritique((frozenset([1,2]), (5,5),0,3,5,5)),
+			CliqueCritique((frozenset([1,2,3]), (1,3),1,3,2,3)),
+			CliqueCritique((frozenset([1,2,3]), (3,5),2,3,3,5)),
+			CliqueCritique((frozenset([2,3]), (1,3),2,10,3,1)),
+                        CliqueCritique((frozenset([1,2]), (2,5),3,10,5,2)),
+			CliqueCritique((frozenset([1,2,3]), (1,5),3,10,3,3))
+		])
+		debug_msg = "\nGot :\n" + str(self.Cm)
+		debug_msg += "\nExpected :\n"
+		for c in R_expected:
+			debug_msg += str(c) + "\n"
+		self.assertEqual(R, R_expected, debug_msg)
 
 
 

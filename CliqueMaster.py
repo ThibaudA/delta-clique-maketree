@@ -176,6 +176,12 @@ class CliqueMaster:
 					    	    #self._nodeinterdeque.append(c_add)  #Ajout dans la file si tp ne bouge pas on fait suivre les info des successeurs.
 					    	else:
 						    c_add._deltamin=c._deltamin
+					            
+                                                    if time_extension is None:
+					                time_extension=c._tp-new_t
+                                                    else:
+					                time_extension=min(c._tp-new_t,time_extension)
+
                                                     if c._tp-new_t<c._deltamax:
 							c._deltamax = None
 							c_wannabe=CliqueCritique((c._X,(c._tlimitb,c._tlimite),c._deltamin,c._tp-new_t,c._td,c._tp))
@@ -189,6 +195,13 @@ class CliqueMaster:
                                                 c_add._td=c._td
                                                 c_add._tp=c._tp
 						#équivalent de time_extension	
+                                             
+                                                if time_extension is None:
+					                time_extension=c._tp-new_t
+                                                else:
+					                time_extension=min(c._tp-new_t,time_extension)
+
+
 						if c._tp-new_t<c._deltamax:
 							c._deltamax = None
 							c_wannabe=CliqueCritique((c._X,(c._tlimitb,c._tlimite),c._deltamin,c._tp-new_t,c._td,c._tp))
@@ -240,14 +253,23 @@ class CliqueMaster:
 							c._min_deltamin_success=c_add._deltamin
                                                 
 						#étrange je pense que time_extention est important la aussi
-					        if c._deltamax is not None:
-				    		        if c._min_deltamin_success is not None:
-				    		            if c._min_deltamin_success <= c._deltamax:
-			    				        c._deltamax=None
-                                                            else:
-			    				        c._deltamax=c._min_deltamin_success
+                                                if time_extension is not None:
+                                                    if c._deltamax is not None:
+				    		            if c._min_deltamin_success is not None:
+				    		                if c._min_deltamin_success < min(time_extension,c._deltamax):
+			    				            c._deltamax=c._min_deltamin_success
+                                                    else:
+                                                        if c._min_deltamin_success <= time_extension:
+                                                                    c._deltamax=c._min_deltamin_success
+                                                    
+                                                    
                                                 else:
-	    					        c._deltamax=c._min_deltamin_success
+                                                    if c._deltamax is not None:
+				    		            if c._min_deltamin_success is not None:
+				    		                if c._min_deltamin_success < c._deltamax:
+			    				            c._deltamax=c._min_deltamin_success
+                                                    else:
+	    		        			        c._deltamax=c._min_deltamin_success
 			            	
 					self._nodeinterdeque.append(c_add)
 					sys.stderr.write("Adding " + str(c_add) + " from "+ str(c) +" (node extension)\n")
