@@ -5,18 +5,18 @@ import bisect
 class Clique:
 	def __init__(self, c,candidates=set([])):
 		(X,(tb,te),(tlimitb,tlimite)) = c
-                self._deltamin=0
+		self._deltamin=0
 		self._min_deltamin_success=None
 		self._deltamax=None
 		self._X = X
-                self._tlimitb=tlimitb
-                self._tlimite=tlimite
-                self._tb = tb
+		self._tlimitb=tlimitb
+		self._tlimite=tlimite
+		self._tb = tb
 		self._te = te
-                self._td = None
-                self._tp = None
-                self._candidates = candidates
-	
+		self._td = None
+		self._tp = None
+		self._candidates = candidates
+
 	def __eq__(self, other):
 		if self._X == other._X and self._tb == other._tb and self._te == other._te:
 			return True
@@ -29,27 +29,25 @@ class Clique:
 	def __str__(self):
 		return ','.join(map(str, list(self._X)))  + " " + str(self._tb) + "," + str(self._te)  + " " + str(self._tlimitb) + "," + str(self._tlimite) + " " +  str(self._deltamin)+ " " +  str(self._deltamax)
 
-	
+
 	def getAdjacentNodes(self, times, nodes, delta):
-            if self._te - self._tb <= delta:
-                for u in self._X:
-                    neighbors = nodes[u]
-                    for n in neighbors:
-                        # On regarde si le lien est apparu entre tb et te
-                        if self._tb in times[frozenset([u,n])]:
-				self._candidates.add(n)
+		if self._te - self._tb <= delta:
+			for u in self._X:
+				neighbors = nodes[u]
+				for n in neighbors:
+					# On regarde si le lien est apparu entre tb et te
+					if self._tb in times[frozenset([u,n])]:
+						self._candidates.add(n)
 
-                        if self._te in times[frozenset([u,n])]:
-                        	self._candidates.add(n)
+					if self._te in times[frozenset([u,n])]:
+						self._candidates.add(n)
+			self._candidates = self._candidates.difference(self._X)
+		return self._candidates
 
 
-            self._candidates = self._candidates.difference(self._X)
-	    return self._candidates
-
-	
 	def isClique(self, times, node, delta):
 		""" returns True if X(c) union node is a clique over tb;te, False otherwise"""
-                first,last,maxinterval=[],[],None
+		first,last,maxinterval=[],[],None
 		for i in self._X:
 			if frozenset([i, node]) not in times.keys():
 				# Verifier que le lien existe
@@ -62,17 +60,17 @@ class Clique:
 				if len(time)==0:
 					return False,None,None,None
 				time = [self._tb] + time + [self._te]
-				ict = [j - i for i,j in zip(time[:-1], time[1:])] 
+				ict = [j - i for i,j in zip(time[:-1], time[1:])]
 			if max(ict) > delta:
 				return False,None,None,None
 
-                        first.append(min(time[1:-1])) #first link for this 2 nodes
-                        last.append(max(time[1:-1])) #last link for this 2 nodes
+			first.append(min(time[1:-1])) #first link for this 2 nodes
+			last.append(max(time[1:-1])) #last link for this 2 nodes
 			if len(time)<=3:
 				interval=[0]
 			else:
 				interval=[j-i for i,j in zip(time[1:-2],time[2:-1])]
-			if max(interval)>maxinterval or maxinterval==None: 
+			if max(interval)>maxinterval or maxinterval==None:
 				maxinterval=max(interval) #max interval for this two nodes
 
 		return True,first,last,maxinterval
@@ -80,7 +78,7 @@ class Clique:
 	def getFirstTInInterval(self, times, nodes, td, delta):
 		# Plus petit t entre te et td + delta impliquant (u,v) ?
 		t =  None
-                sameclique=False
+		sameclique=False
 		# Bien extraire tous les noeuds de la clique et du voisinage de chaque noeud de la clique (c'est ici qu'on fait grossir le temps pour pouvoir ajouter des noeuds)
 		# Get all links implying at least one of X's nodes.
 		candidates = set()
@@ -97,37 +95,37 @@ class Clique:
 
 			if len(times[candidate]) == 1 and index == 1 and times[candidate][index-1] <= td + delta:
 				if times[candidate][index - 1] > self._te:
-					if t>times[candidate][index-1] or t==None: 
-                                            t = times[candidate][index-1]
-                                            if candidate.issubset(self._X):
-                                                sameclique=True
-                                            else :
-                                                 sameclique=False
-                                        elif t==times[candidate][index-1]:
-                                            if candidate.issubset(self._X):
-                                                sameclique=True
-			
-                        elif index < len(times[candidate]) and times[candidate][index] <= td + delta:
+					if t>times[candidate][index-1] or t==None:
+						t = times[candidate][index-1]
+						if candidate.issubset(self._X):
+							sameclique=True
+						else :
+							sameclique=False
+					elif t==times[candidate][index-1]:
+						if candidate.issubset(self._X):
+							sameclique=True
+
+			elif index < len(times[candidate]) and times[candidate][index] <= td + delta:
 				if times[candidate][index] > self._te:
 					if t>times[candidate][index] or t==None:
-        					t = times[candidate][index]
-                                                if candidate.issubset(self._X):
-                                                    sameclique=True
-                                                else :
-                                                    sameclique=False
-                                        elif t==times[candidate][index]:
-                                            if candidate.issubset(self._X):
-                                                sameclique=True
+						t = times[candidate][index]
+						if candidate.issubset(self._X):
+							sameclique=True
+						else :
+							sameclique=False
+					elif t==times[candidate][index]:
+						if candidate.issubset(self._X):
+							sameclique=True
 		return t,sameclique
 
 
 
 	def getLastTInInterval(self, times, nodes, tp, delta):
-		# Plus petit t entre tb et tp - delta impliquant (u,v) ? 
+		# Plus petit t entre tb et tp - delta impliquant (u,v) ?
 		t = None
-                sameclique=None
+		sameclique=None
 		# Bien extraire tous les noeuds de la clique et du voisinage de chaque noeud de la clique (c'est ici qu'on fait grossir le temps pour pouvoir ajouter des noeuds)
-		
+
 		# Get all links implying at least one of X's nodes.
 		candidates = set()
 		for u in self._X:
@@ -137,26 +135,26 @@ class Clique:
 					candidates.add(link)
 		# Get the intercontact times in [tp - delta; tb]
 		for candidate in candidates:
-                        index = bisect.bisect_left(times[candidate], self._tb)
-                        index = index - 1
-                        
-                        if index >= 0 and times[candidate][index] >= tp - delta:
+			index = bisect.bisect_left(times[candidate], self._tb)
+			index = index - 1
+
+			if index >= 0 and times[candidate][index] >= tp - delta:
 				if  t<times[candidate][index] or t==None:
-                            		t = times[candidate][index]
-                                        if candidate.issubset(self._X):
-                                            sameclique=True
-                                        else :
-                                            sameclique=False
+					t = times[candidate][index]
+					if candidate.issubset(self._X):
+						sameclique=True
+					else :
+						sameclique=False
 				elif  t==times[candidate][index]:
-                                        if candidate.issubset(self._X):
-                                            sameclique=True
+					if candidate.issubset(self._X):
+						sameclique=True
 		#sys.stderr.write("    new_t = %s\n" % (str(t)))
 		return t,sameclique
 
 
 
 
-	
+
 	def getTd(self, times, delta):
 		# Pour chaque lien dans X, Récupérer dans T les temps x tq te-delta < x < te. Si len(T) = 1, regarder si x est plus petit que le tmin déjà connu.
 		td = 0
@@ -174,7 +172,7 @@ class Clique:
 			td = self._te - delta
 		#sys.stderr.write("    td = %d\n" % (td))
 		return td
-	
+
 	def getTp(self, times, delta):
 		# Pour chaque lien dans X, Récupérer dans T les temps x tq te-delta < x < te. Si len(T) = 1, regarder si x est plus petit que le tmin déjà connu.
 		tp = 0
@@ -210,7 +208,7 @@ class Clique:
 					lefttimes =	([x for x in times[link] if(x <= self._tp and x >= self._tb)])
 					if len(lefttimes) > 0:
 						max_t.append(max(lefttimes))
-						
+
 
 
 
@@ -223,20 +221,20 @@ class Clique:
 			tleft = min(max_t)
 		else:
 			tleft = self._tp
-		
+
 		deltamin=max(tright-self._td,self._tp-tleft)
-		
+
 		for u in self._X:
 			for v in self._X:
 				link = frozenset([u,v])
 				if link in times:
 
-					insidetimes =	([x for x in times[link] if(x >= self._tp-deltamin  and x <= self._td+deltamin)])	
+					insidetimes =	([x for x in times[link] if(x >= self._tp-deltamin  and x <= self._td+deltamin)])
 					if len(insidetimes)<=1:
 						interval=[0]
 					else:
 						interval=[j-i for i,j in zip(insidetimes[:-1],insidetimes[1:])]
-					if max(interval)>maxinterval or maxinterval==None: 
+					if max(interval)>maxinterval or maxinterval==None:
 						maxinterval=max(interval) #max interval for this two nodes
 
 
