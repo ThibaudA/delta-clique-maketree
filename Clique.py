@@ -239,8 +239,6 @@ class Clique:
 
 
 		deltamin=max(maxinterval,deltamin)
-
-
 		#sys.stderr.write("    td = %d\n" % (td))
 		return deltamin
 
