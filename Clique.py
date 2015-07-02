@@ -6,7 +6,6 @@ class Clique:
 	def __init__(self, c,candidates=set([])):
 		(X,(tb,te)) = c
 		self._deltamin=0
-		self._min_deltamin_success=None
 		self._deltamax=None
 		self._X = X
 		self._tb = tb
