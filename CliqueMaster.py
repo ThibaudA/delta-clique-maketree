@@ -82,7 +82,6 @@ class CliqueMaster:
 							c._deltamax=new_t-c._td
 							sys.stderr.write("Adding " + str(c_add) + " (time extension)\n")
 							self._interdeque.append(c_add)  #Ajout dans la file si td ne bouge pas on fait suivre les info des successeurs.
-							#self._nodeinterdeque.append(c_add)  #Ajout dans la file si td ne bouge pas on fait suivre les info des successeurs.
 						else :
 							time_extension=new_t-c._td
 							c_add._deltamin=c._deltamin
@@ -139,7 +138,6 @@ class CliqueMaster:
 								c._deltamax=c._tp-new_t
 								sys.stderr.write("Adding " + str(c_add) + " (time extension)\n")
 								self._interdeque.append(c_add)  #Ajout dans la file si tp ne bouge pas on fait suivre les info des successeurs.
-								#self._nodeinterdeque.append(c_add)  #Ajout dans la file si tp ne bouge pas on fait suivre les info des successeurs.
 						else:
 							c_add._deltamin=c._deltamin
 							if time_extension is None:
