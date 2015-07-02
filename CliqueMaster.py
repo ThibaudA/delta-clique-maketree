@@ -98,7 +98,7 @@ class CliqueMaster:
 				new_t,sameclique = c.getFirstTInInterval(self._times, self._nodes, c._td, delta)
 				if new_t is not None:
 					if sameclique: #addclique
-						c_add = Clique((c._X, (c._tb, new_t),(c._tlimitb,new_t)),c._candidates)
+						c_add = Clique((c._X, (c._tb, new_t)),c._candidates)
 						c_add._td=c_add.getTd(self._times,delta)
 						c_add._tp=c._tp
 
@@ -118,7 +118,7 @@ class CliqueMaster:
 							self._interdeque.append(c_add)
 					else:
 				        #if different clique we dont want to change deltamax/min
-						c_add = Clique((c._X, (c._tb, new_t),(c._tlimitb,c._tlimite)),c._candidates)
+						c_add = Clique((c._X, (c._tb, new_t)),c._candidates)
 						c_add._deltamin=c._deltamin
 						c_add._td=c._td
 						c_add._tp=c._tp
@@ -127,7 +127,7 @@ class CliqueMaster:
 						sys.stderr.write("Adding " + str(c_add) + " (time extension)\n")
 						self._interdeque.append(c_add)
 				else:
-					c_add = Clique((c._X, (c._tb, c._td + delta),(c._tlimitb,c._tlimite)),c._candidates)
+					c_add = Clique((c._X, (c._tb, c._td + delta)),c._candidates)
 					c_add._td=c._td
 					c_add._tp=c._tp
 					c_add._deltamin=c._deltamin
@@ -144,7 +144,7 @@ class CliqueMaster:
 				#sameclique if the new link is in the clique
 				if new_t is not None:
 					if sameclique:
-						c_add = Clique((c._X, (new_t , c._te),(new_t,c._tlimite)),c._candidates)
+						c_add = Clique((c._X, (new_t , c._te)),c._candidates)
 						c_add._td=  c._td
 						c_add._tp = c_add.getTp(self._times, delta)
 						if c._tp != c_add._tp:
@@ -161,7 +161,7 @@ class CliqueMaster:
 								#L'exploration à droite n'est pas suffisante pour
 								#pouvoir determiner le deltamax
 								#Sortie pour reconstruction de l'arbre ultérieure
-									c_wannabe=CliqueCritique((c._X,(c._tlimitb,c._tlimite),c._deltamin,time_extension,c_add._td,c_add._tp))
+									c_wannabe=CliqueCritique((c._X,c._deltamin,time_extension,c_add._td,c_add._tp))
 									sys.stderr.write("Trying " + str(c_wannabe) + " but time extension\n")
 							else:
 								c._deltamax=c._tp-new_t
@@ -177,14 +177,14 @@ class CliqueMaster:
 
 							if c._tp-new_t<c._deltamax:
 								c._deltamax = None
-								c_wannabe=CliqueCritique((c._X,(c._tlimitb,c._tlimite),c._deltamin,c._tp-new_t,c._td,c._tp))
+								c_wannabe=CliqueCritique((c._X,c._deltamin,c._tp-new_t,c._td,c._tp))
 								sys.stderr.write("Trying " + str(c_wannabe) + " but time extension\n")
 
 								self._interdeque.append(c_add)
 								sys.stderr.write("Adding " + str(c_add) + " (left time extension)\n")
 					else:
 						#if different clique we dont want to change deltamax/min
-						c_add = Clique((c._X, (new_t , c._te),(c._tlimitb,c._tlimite)),c._candidates)
+						c_add = Clique((c._X, (new_t , c._te)),c._candidates)
 						c_add._deltamin=c._deltamin
 						c_add._td=c._td
 						c_add._tp=c._tp
@@ -197,12 +197,12 @@ class CliqueMaster:
 
 						if c._tp-new_t<c._deltamax:
 							c._deltamax = None
-							c_wannabe=CliqueCritique((c._X,(c._tlimitb,c._tlimite),c._deltamin,c._tp-new_t,c._td,c._tp))
+							c_wannabe=CliqueCritique((c._X,c._deltamin,c._tp-new_t,c._td,c._tp))
 							sys.stderr.write("Trying " + str(c_wannabe) + " but time extension\n")
 						self._interdeque.append(c_add)
 						sys.stderr.write("Adding " + str(c_add) + " (left time extension)\n")
 				else:
-					c_add = Clique((c._X, (c._tp - delta, c._te),(c._tlimitb,c._tlimite)),c._candidates)
+					c_add = Clique((c._X, (c._tp - delta, c._te)),c._candidates)
 					c_add._deltamin=c._deltamin
 					c_add._td=c._td
 					c_add._tp=c._tp
@@ -224,12 +224,12 @@ class CliqueMaster:
 				#maxinterval: maximum interval between 2 link (same nodes)
 				if isclique:
 					Xnew = set(c._X).union([node])
-					c_add = Clique((frozenset(Xnew), (c._tb, c._te),(min(c._tlimitb,min(first)),max(c._tlimite,max(last)))),c._candidates) #determination of limitb/e
+					c_add = Clique((frozenset(Xnew), (c._tb, c._te)),c._candidates) #determination of limitb/e
 					#deltamin determination, maybe the use of last and first is useless here
 					c_add._tp = max(max(first),c._tp)
 					c_add._td = min(c._td,min(last))
 
-					#c_add._deltamin=max(c._deltamin,maxinterval,c_add._tlimite-min(last),max(first)-c_add._tlimitb,c_add._tlimite-c._td,c._tp-c_add._tlimitb)
+
 					c_add._deltamin=c_add.getDeltaMin(self._times)
 
 					#print c_add.getDeltaMin(self._times)
@@ -284,16 +284,16 @@ class CliqueMaster:
 
 			if c._deltamax is not None:
 				if c._deltamax>c._deltamin:
-					c_add=CliqueCritique((c._X,(c._tlimitb,c._tlimite),c._deltamin,c._deltamax,c._td,c._tp))
+					c_add=CliqueCritique((c._X,c._deltamin,c._deltamax,c._td,c._tp))
 					self._R.add(c_add)
 					sys.stderr.write("Return " + str(c_add) + "\n")
 				else:
-					c_add=CliqueCritique((c._X,(c._tlimitb,c._tlimite),c._deltamin,c._deltamax,c._td,c._tp))
+					c_add=CliqueCritique((c._X,c._deltamin,c._deltamax,c._td,c._tp))
 					sys.stderr.write("Trying " + str(c_add) + " but deltamin = deltamax\n")
 
 			if is_max : #deltamax=delta + add c to R
 				sys.stderr.write(str(c) + " is maximal\n")
-				c_add=CliqueCritique((c._X,(c._tlimitb,c._tlimite),c._deltamin,delta,c._td,c._tp))
+				c_add=CliqueCritique((c._X,c._deltamin,delta,c._td,c._tp))
 				self._R.add(c_add) #ajout au set de retour
 				sys.stderr.write("Return " + str(c_add) + "\n")
 

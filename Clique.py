@@ -4,13 +4,11 @@ import bisect
 
 class Clique:
 	def __init__(self, c,candidates=set([])):
-		(X,(tb,te),(tlimitb,tlimite)) = c
+		(X,(tb,te)) = c
 		self._deltamin=0
 		self._min_deltamin_success=None
 		self._deltamax=None
 		self._X = X
-		self._tlimitb=tlimitb
-		self._tlimite=tlimite
 		self._tb = tb
 		self._te = te
 		self._td = None
@@ -24,10 +22,10 @@ class Clique:
 			return False
 
 	def __hash__(self):
-		return hash((self._X, self._tb, self._te, self._tlimitb,self._tlimite))
+		return hash((self._X, self._tb, self._te))
 
 	def __str__(self):
-		return ','.join(map(str, list(self._X)))  + " " + str(self._tb) + "," + str(self._te)  + " " + str(self._tlimitb) + "," + str(self._tlimite) + " " +  str(self._deltamin)+ " " +  str(self._deltamax)
+		return ','.join(map(str, list(self._X)))  + " " + str(self._tb) + "," + str(self._te)   + " " +  str(self._deltamin)+ " " +  str(self._deltamax)
 
 
 	def getAdjacentNodes(self, times, nodes, delta):
@@ -208,8 +206,6 @@ class Clique:
 					lefttimes =	([x for x in times[link] if(x <= self._tp and x >= self._tb)])
 					if len(lefttimes) > 0:
 						max_t.append(max(lefttimes))
-
-
 
 
 		if len(min_t) > 0:
