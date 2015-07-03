@@ -6,7 +6,7 @@ import bisect
 Cm = CliqueMaster()
 times = dict()
 nodes = dict()
-delta = int(sys.argv[1]) 
+delta = int(sys.argv[1])
 nb_lines = 0
 for line in sys.stdin:
 	contents = line.split(" ")
@@ -19,7 +19,7 @@ for line in sys.stdin:
         c_add=Clique((link,(t,t),(t,t)))
         c_add._td,c_add._tp=t,t
         Cm.addClique(c_add)
-	
+
 	# Populate data structures
 	if not times.has_key(link):
 		times[link] = []
@@ -36,12 +36,10 @@ for line in sys.stdin:
 	nb_lines = nb_lines + 1
 
 
-	
+
 Cm._times = times
 Cm._nodes = nodes
 sys.stderr.write("Processed " + str(nb_lines) + " from stdin\n")
 
-R = Cm.getTree(delta)
-Cm.printCliques()	
-
-
+R = Cm.getSpace(delta)
+Cm.printCliques()

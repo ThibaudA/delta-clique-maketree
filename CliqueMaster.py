@@ -45,7 +45,7 @@ class CliqueMaster:
 
 
 
-	def getTree(self, delta):
+	def getSpace(self, delta):
 		""" Returns a set of maximal cliques. """
 		token=0
 		while len(self._S) != 0 or len(self._S_nodeadd) != 0:

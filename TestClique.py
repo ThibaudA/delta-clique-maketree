@@ -24,7 +24,7 @@ class TestClique(unittest.TestCase):
                     self.Cm.addClique(c)
 		self.Cm._times = {frozenset([1,2]):[1]}
 		self.Cm._nodes = {1:set([2]), 2:set([1])}
-		R = self.Cm.getTree(10)
+		R = self.Cm.getSpace(10)
 		self.assertEqual(R, set([CliqueCritique((frozenset([1,2]),0,10,1,1))]))
 
 	def test_negative_delta(self):
@@ -39,7 +39,7 @@ class TestClique(unittest.TestCase):
                     self.Cm.addClique(c)
 		self.Cm._times = {frozenset([1,2]):[1]}
 		self.Cm._nodes = {1:set([2]), 2:set([1])}
-		R = self.Cm.getTree(100)
+		R = self.Cm.getSpace(100)
 		self.assertEqual(R, set([CliqueCritique((frozenset([1,2]),0,100,1,1))]))
 
 	def test_simple_triangle_when_delta_is_5(self):
@@ -54,7 +54,7 @@ class TestClique(unittest.TestCase):
 		self.Cm._nodes = {1: set([2, 3]), 2: set([1, 3]), 3: set([1, 2])}
 		self.Cm._times = {frozenset([1, 3]): [2], frozenset([1, 2]): [1], frozenset([2, 3]): [3]}
 
-		R = self.Cm.getTree(5)
+		R = self.Cm.getSpace(5)
 		R_expected = set([
 
 			CliqueCritique((frozenset([1,2,3]),2,5,1,3)),
@@ -84,7 +84,7 @@ class TestClique(unittest.TestCase):
 		self.Cm._nodes = {1: set([2]), 2: set([1])}
 		self.Cm._times = {frozenset([1, 2]): [1, 3]}
 
-		R = self.Cm.getTree(5)
+		R = self.Cm.getSpace(5)
 		R_expected = set([
 
 			CliqueCritique((frozenset([1,2]),0,2,1,1)),
@@ -108,7 +108,7 @@ class TestClique(unittest.TestCase):
 		self.Cm._nodes = {1: set([2]), 2: set([1])}
 		self.Cm._times = {frozenset([1, 2]): [1, 3]}
 
-		R = self.Cm.getTree(1)
+		R = self.Cm.getSpace(1)
 
 
 		R_expected = set([
@@ -134,7 +134,7 @@ class TestClique(unittest.TestCase):
 		self.Cm._nodes = {1: set([2, 3]), 2: set([1, 3]), 3: set([1, 2])}
 		self.Cm._times = {frozenset([1, 3]): [3], frozenset([1, 2]): [1, 4], frozenset([2, 3]): [2]}
 
-		R = self.Cm.getTree(2)
+		R = self.Cm.getSpace(2)
 		R_expected = set([
 			CliqueCritique((frozenset([1,2]),0,2,1,1)),
 			CliqueCritique((frozenset([1,2]),0,2,4,4)),
@@ -163,7 +163,7 @@ class TestClique(unittest.TestCase):
 		self.Cm._nodes = {1: set([2, 3]), 2: set([1, 3]), 3: set([1, 2])}
 		self.Cm._times = {frozenset([1, 3]): [3], frozenset([1, 2]): [1, 4], frozenset([2, 3]): [2]}
 
-		R = self.Cm.getTree(5)
+		R = self.Cm.getSpace(5)
 		R_expected = set([
 			CliqueCritique((frozenset([1,2]),0,3,1,1)),
 			CliqueCritique((frozenset([1,2]),0,3,4,4)),
@@ -195,7 +195,7 @@ class TestClique(unittest.TestCase):
 		self.Cm._nodes = {1: set([2, 3]), 2: set([1, 3]), 3: set([1, 2])}
 		self.Cm._times = {frozenset([1, 3]): [3], frozenset([1, 2]): [1, 4], frozenset([2, 3]): [2]}
 
-		R = self.Cm.getTree(100)
+		R = self.Cm.getSpace(100)
 		R_expected = set([
 			CliqueCritique((frozenset([1,2]),0,3,1,1)),
 			CliqueCritique((frozenset([1,2]),0,3,4,4)),
@@ -228,7 +228,7 @@ class TestClique(unittest.TestCase):
 		self.Cm._nodes = {1: set([2, 3]), 2: set([1, 3]), 3: set([1, 2])}
 		self.Cm._times = {frozenset([1, 3]): [1], frozenset([1, 2]): [1], frozenset([2, 3]): [1]}
 
-		R = self.Cm.getTree(100)
+		R = self.Cm.getSpace(100)
 		R_expected = set([
 			CliqueCritique((frozenset([1,2,3]),0,100,1,1))
 		])
@@ -251,7 +251,7 @@ class TestClique(unittest.TestCase):
 		self.Cm._nodes = {1: set([2, 3]), 2: set([1, 3]), 3: set([1, 2])}
 		self.Cm._times = {frozenset([1, 3]): [1], frozenset([1, 2]): [1], frozenset([2, 3]): [1,2]}
 
-		R = self.Cm.getTree(5)
+		R = self.Cm.getSpace(5)
 		R_expected = set([
 			CliqueCritique((frozenset([1,2,3]),0,5,1,1)),
 			CliqueCritique((frozenset([2,3]),1,5,2,1)),
@@ -277,7 +277,7 @@ class TestClique(unittest.TestCase):
 		self.Cm._nodes = {1: set([2]), 2: set([1, 3]), 3: set([2])}
 		self.Cm._times = {frozenset([1, 2]): [1,3,6], frozenset([2, 3]): [2]}
 
-		R = self.Cm.getTree(10)
+		R = self.Cm.getSpace(10)
 		R_expected = set([
 
 			CliqueCritique((frozenset([2,3]), 0,10,2,2)),
@@ -308,7 +308,7 @@ class TestClique(unittest.TestCase):
 		self.Cm._nodes = {1: set([2,3]), 2: set([1, 3]), 3: set([1,2])}
 		self.Cm._times = {frozenset([1, 2]): [2], frozenset([2, 3]): [2],frozenset([1, 3]): [1,4]}
 
-		R = self.Cm.getTree(5)
+		R = self.Cm.getSpace(5)
 		R_expected = set([
 
 			CliqueCritique((frozenset([1,3]), 0,3,4,4)),
@@ -341,7 +341,7 @@ class TestClique(unittest.TestCase):
 		self.Cm._nodes = {1: set([2,3]), 2: set([1, 3]), 3: set([1,2])}
 		self.Cm._times = {frozenset([1, 2]): [2], frozenset([2, 3]): [2],frozenset([1, 3]): [1,3,5]}
 
-		R = self.Cm.getTree(7)
+		R = self.Cm.getSpace(7)
 		R_expected = set([
 
 			CliqueCritique((frozenset([1,3]), 0,2,1,1)),
@@ -381,7 +381,7 @@ class TestClique(unittest.TestCase):
 		self.Cm._nodes = {1: set([2,3,4]), 2: set([1,3,4]), 3: set([1,2,4]),4: set([1,2,3])}
 		self.Cm._times = {frozenset([1, 2]): [1,2], frozenset([1, 3]): [2],frozenset([1, 4]): [3],frozenset([2, 3]): [5],frozenset([2, 4]): [5],frozenset([3, 4]): [5]}
 
-		R = self.Cm.getTree(10)
+		R = self.Cm.getSpace(10)
 		R_expected = set([
 
 			CliqueCritique((frozenset([1,2]),0,1,1,1)),
@@ -415,7 +415,7 @@ class TestClique(unittest.TestCase):
 		self.Cm._nodes = {1: set([2,3]), 2: set([1,3]), 3: set([1,2])}
 		self.Cm._times = {frozenset([1, 2]): [1,6], frozenset([1, 3]): [4,6],frozenset([2, 3]): [5]}
 
-		R = self.Cm.getTree(10)
+		R = self.Cm.getSpace(10)
 		R_expected = set([
 			CliqueCritique((frozenset([1,2]),0,5,1,1)),
 			CliqueCritique((frozenset([1,2]),0,5,6,6)),
@@ -453,7 +453,7 @@ class TestClique(unittest.TestCase):
 		self.Cm._nodes = {1: set([2,3]), 2: set([1,3]), 3: set([1,2])}
 		self.Cm._times = {frozenset([1, 2]): [1,4,9], frozenset([1, 3]): [3,4],frozenset([2, 3]): [3,4]}
 
-		R = self.Cm.getTree(10)
+		R = self.Cm.getSpace(10)
 		R_expected = set([
 			CliqueCritique((frozenset([1,2]),0,3,1,1)),
 			CliqueCritique((frozenset([2,3]),0,1,3,3)),
@@ -488,7 +488,7 @@ class TestClique(unittest.TestCase):
                 self.Cm._nodes = {1: set([2,3]), 2: set([1,3]), 3: set([1,2])}
 		self.Cm._times = {frozenset([1, 2]): [2,5], frozenset([1, 3]): [3],frozenset([2, 3]): [1,3]}
 
-		R = self.Cm.getTree(10)
+		R = self.Cm.getSpace(10)
 		R_expected = set([
 			CliqueCritique((frozenset([1,3]),0,3,3,3)),
 			CliqueCritique((frozenset([2,3]),0,2,3,3)),
