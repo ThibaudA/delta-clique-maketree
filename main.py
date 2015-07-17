@@ -16,23 +16,23 @@ for line in sys.stdin:
 
 	link = frozenset([u,v])
 	time = (t,t)
-        c_add=Clique((link,(t,t),(t,t)))
-        c_add._td,c_add._tp=t,t
-        Cm.addClique(c_add)
+	c_add=Clique((link,(t,t)))
+	c_add._td,c_add._tp=t,t
+	Cm.addClique(c_add)
 
 	# Populate data structures
 	if not times.has_key(link):
 		times[link] = []
 	times[link].append(t)
 
-        if not u in nodes:
+	if not u in nodes:
 		nodes[u] = set()
 
 	if not v in nodes:
 		nodes[v] = set()
 
 	nodes[u].add(v)
-        nodes[v].add(u)
+	nodes[v].add(u)
 	nb_lines = nb_lines + 1
 
 
