@@ -216,7 +216,6 @@ class Clique:
 			tleft = min(max_t)
 		else:
 			tleft = self._tp
-
 		deltamin=max(tright-self._td,self._tp-tleft)
 
 		for u in self._X:
@@ -225,6 +224,7 @@ class Clique:
 				if link in times:
 
 					insidetimes =	([x for x in times[link] if(x >= self._tp-deltamin  and x <= self._td+deltamin)])
+					insidetimes = [self._tp-deltamin]+insidetimes+[self._td+deltamin]
 					if len(insidetimes)<=1:
 						interval=[0]
 					else:
@@ -232,8 +232,10 @@ class Clique:
 					if max(interval)>maxinterval or maxinterval==None:
 						maxinterval=max(interval) #max interval for this two nodes
 
+		print deltamin,maxinterval
 
 		deltamin=max(maxinterval,deltamin)
+		#deltamin=maxinterval
 		#sys.stderr.write("    td = %d\n" % (td))
 		return deltamin
 
