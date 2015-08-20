@@ -232,7 +232,6 @@ class Clique:
 					if max(interval)>maxinterval or maxinterval==None:
 						maxinterval=max(interval) #max interval for this two nodes
 
-		print deltamin,maxinterval
 
 		deltamin=max(maxinterval,deltamin)
 		#deltamin=maxinterval
